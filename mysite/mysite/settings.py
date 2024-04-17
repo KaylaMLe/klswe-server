@@ -1,41 +1,31 @@
-from dotenv import load_dotenv
-import os
 from pathlib import Path
-
-
-# Load environment variables from .env file
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ALLOWED_HOSTS = [os.getenv('FRONTEND_IP')]
 
-SECURE_SSL_REDIRECT = True
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-ds(e9u1p9k=_!hm194i#dsj5$p7=i7=^^kks9ax7!#a&3oq^v('
 
-SECURE_HSTS_PRELOAD = True
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
-SECURE_HSTS_SECONDS = 60
+ALLOWED_HOSTS = []
 
-SESSION_COOKIE_SECURE = True
-
-CSRF_COOKIE_SECURE = True
-
-SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = os.getenv('DEBUG') == 'True'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-		'js2ts',
 ]
 
 MIDDLEWARE = [
@@ -48,7 +38,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATES = [
     {
@@ -66,7 +56,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
 # Database
@@ -79,7 +69,6 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'js2ts.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -105,7 +94,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 

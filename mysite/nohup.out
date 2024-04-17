@@ -1,0 +1,79 @@
+Watching for file changes with StatReloader
+[16/Apr/2024 20:37:33] "GET / HTTP/1.1" 200 10629
+/home/ec2-user/klswe-server2/mysite/mysite/urls.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+April 16, 2024 - 20:37:22
+Django version 5.0.4, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[16/Apr/2024 20:44:20] code 400, message Bad request version ('ß].¸\x00\x90\x03\x01öøN"PIô\x10\x01\x83\x18.ëNõß\x98\x97]ÏÊ.â\x8c\x00H\x13\x02\x13\x03\x13\x01\x13\x04À,À0Ì©Ì¨À\xadÀ+À/À¬À#À\'À')
+[16/Apr/2024 20:44:20] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Apr/2024 20:44:29] "GET /polls HTTP/1.1" 301 0
+[16/Apr/2024 20:44:43] "GET /polls/ HTTP/1.1" 200 40
+/home/ec2-user/klswe-server2/mysite/mysite/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+April 16, 2024 - 20:44:15
+Django version 5.0.4, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+/home/ec2-user/klswe-server2/mysite/mysite/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+April 16, 2024 - 16:49:30
+Django version 5.0.4, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+/home/ec2-user/klswe-server2/mysite/polls/models.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+April 16, 2024 - 16:56:38
+Django version 5.0.4, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+/home/ec2-user/klswe-server2/mysite/polls/models.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+April 16, 2024 - 17:08:11
+Django version 5.0.4, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Error: That port is already in use.
+[16/Apr/2024 17:53:18] "GET /admin HTTP/1.1" 301 0
+/home/ec2-user/klswe-server2/mysite/polls/admin.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+April 16, 2024 - 17:10:17
+Django version 5.0.4, using settings 'mysite.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
