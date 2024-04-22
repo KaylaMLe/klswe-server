@@ -28,6 +28,9 @@ nohup.out
 # Environment variables
 .env
 
+# Static files collected for deployment
+mysite/staticfiles
+
 # Virtual environment
 .venv/*
 !.venv/requirements.txt
