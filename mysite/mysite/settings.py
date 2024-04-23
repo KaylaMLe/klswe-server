@@ -27,7 +27,7 @@ DEBUG = os.environ["DEBUG"] == "True"
 
 ALLOWED_HOSTS = [
 	"localhost",
-    "api.klswe.com",
+	"api.klswe.com",
 ]
 
 INTERNAL_IPS = [
