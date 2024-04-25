@@ -5,6 +5,7 @@ from .models import CodeText
 
 def store_code_text(request: HttpRequest) -> HttpResponse:
 	code = request.POST.get("code", "")
+
 	code_text = CodeText(code=code)
 	code_text.save()
 
