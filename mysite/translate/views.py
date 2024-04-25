@@ -14,16 +14,15 @@ def store_code_text(request: HttpRequest) -> HttpResponse:
 		)
 	
 	# check if the code is provided
-	if "code" not in request.POST or not request.POST["code"]:
+	code = request.POST.get("code")
+
+	if code is None:
 		return HttpResponse("Code not provided", status=400)
 	
-	if not request.POST["code"].strip():
-		return HttpResponse(
-			"Code is null, empty, or consists of only whitespace.\n" + request.POST["code"],
-			status=400
-		)
+	if not code.strip():
+		message = "Code is empty." if len(code) == 0 else "Code consists of only whitespace.\n" + code
 
-	code = request.POST.get("code", "")
+		return HttpResponse(message, status=400)
 
 	code_text = CodeText(code=code)
 	code_text.save()
