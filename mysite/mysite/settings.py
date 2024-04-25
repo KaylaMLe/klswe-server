@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 	"django.contrib.sessions",
 	"django.contrib.staticfiles",
 	"polls.apps.PollsConfig",
+	"translate.apps.TranslateConfig",
 ]
 
 MIDDLEWARE = [
