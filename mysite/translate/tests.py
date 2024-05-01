@@ -4,6 +4,15 @@ from .models import CodeText
 
 
 class TranslateTestCase(TestCase):
+	def test_insecure_request_redirect(self):
+		"""Test that an insecure request is redirected to a secure request.
+		
+		All insecure requests to any endpoint should be redirected to a secure request. This particular
+		endpoint is chosen arbitrarily.
+		"""
+		response = self.client.post(reverse("translate:store_code_text"))
+		self.assertEqual(response.status_code, 301)
+
 	def test_store_get_code_text(self):
 		"""Test that a CodeText object can be stored, retrieved, and deleted.
 		
@@ -39,6 +48,11 @@ class TranslateTestCase(TestCase):
 		self.assertFalse(CodeText.objects.filter(code="Test code").exists())
 
 	def test_translate_code(self):
+		"""Test that code can be translated successfully.
+		
+		This test checks that the translate code endpoint returns a valid response.
+		"""
+
 		test_js = """
 		function add(a, b) {
 			return a + b;

@@ -37,6 +37,7 @@ mysite/staticfiles
 
 # Python
 __pycache__/
+gemini/
 
 # Database files
 *.sqlite3
