@@ -37,3 +37,23 @@ class TranslateTestCase(TestCase):
 
 		self.assertEqual(response.status_code, 200)
 		self.assertFalse(CodeText.objects.filter(code="Test code").exists())
+
+	def test_translate_code(self):
+		test_js = """
+		function add(a, b) {
+			return a + b;
+		}
+		"""
+		response = self.client.post(
+			reverse("translate:translate_code"),
+			{"code": test_js},
+			secure=True
+		)
+
+		# tests for accuracy are handled in the gemini repo
+		# this test only checks that the response is successful
+		self.assertEqual(response.status_code, 200)
+
+		translated_code = response.content.decode()
+		self.assertTrue(isinstance(translated_code, str))
+		self.assertNotEqual(translated_code, "")

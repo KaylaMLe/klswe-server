@@ -1,9 +1,10 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
+from .gemini.translate import translate
 from .models import CodeText
 
 
-def store_code_text(request: HttpRequest) -> HttpResponse:
+def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 	# redirection changes the request method to GET even if the original request was POST
 	if request.method != "POST":
 		return HttpResponse(
@@ -23,8 +24,24 @@ def store_code_text(request: HttpRequest) -> HttpResponse:
 		message = "Code is empty." if len(code) == 0 else "Code consists of only whitespace.\n" + code
 
 		return HttpResponse(message, status=400)
+	
+	return code
 
-	code_text = CodeText(code=code)
+def translate_code(request: HttpRequest) -> HttpResponse:
+	code_or_error = validate_code_request(request)
+
+	if isinstance(code_or_error, HttpResponse):
+		return code_or_error
+
+	return translate(code_or_error)
+
+def store_code_text(request: HttpRequest) -> HttpResponse:
+	code_or_error = validate_code_request(request)
+
+	if isinstance(code_or_error, HttpResponse):
+		return code_or_error
+
+	code_text = CodeText(code=code_or_error)
 	code_text.save()
 
 	return HttpResponse("Code saved with id: " + str(code_text.pk))
