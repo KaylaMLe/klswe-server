@@ -55,8 +55,8 @@ CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
-    "https://www.klswe.com/",
-    "https://klswe.com/"
+    "https://www.klswe.com",
+    "https://klswe.com",
 ]
 
 INTERNAL_IPS = [
