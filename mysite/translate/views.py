@@ -1,18 +1,15 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import json
 from .gemini.translate import translate
 from .models import CodeText
 
 
-def get_csrf(request: HttpRequest) -> JsonResponse:
-	get_token(request)
-	return JsonResponse({'detail': 'CSRF cookie set'})
-
 def validate_code_request(request: HttpRequest) -> str | HttpResponse:
-	# redirection changes the request method to GET even if the original request was POST
+    # redirection changes the request method to GET even if the original request was POST
 	if request.method != "POST":
 		return HttpResponse(
 			f"""Expected POST request but got a {request.method} request.
@@ -24,7 +21,7 @@ def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 	try:
 		data = json.loads(request.body.decode("utf-8"))
 	except json.JSONDecodeError:
-		return HttpResponsBadRequest("Invalid JSON")
+		return HttpResponse("Invalid JSON", status-400)
 
 	# check if the code is provided
 	code = data.get("code")
@@ -44,7 +41,10 @@ def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 	
 	return code
 
+
+@csrf_exempt
 def translate_code(request: HttpRequest) -> HttpResponse:
+	csrf_token = get_token(request)
 	code_or_error = validate_code_request(request)
 
 	if isinstance(code_or_error, HttpResponse):

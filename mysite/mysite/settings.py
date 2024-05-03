@@ -41,7 +41,11 @@ CORS_ALLOWED_ORIGINS = [
 	"https://" + os.environ["FRONTEND_IP"],
 ]
 
+CSRF_COOKIE_DOMAIN = ".klswe.com"
+
 CSRF_COOKIE_HTTPONLY = False
+
+CSRF_COOKIE_PATH = "/"
 
 CSRF_COOKIE_SAMESITE = "None"
 
