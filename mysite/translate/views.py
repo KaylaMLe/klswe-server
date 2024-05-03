@@ -1,8 +1,15 @@
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.middleware.csrf import get_token
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_http_methods
+import json
 from .gemini.translate import translate
 from .models import CodeText
 
+
+def get_csrf(request: HttpRequest) -> JsonResponse:
+	get_token(request)
+	return JsonResponse({'detail': 'CSRF cookie set'})
 
 def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 	# redirection changes the request method to GET even if the original request was POST
@@ -14,11 +21,21 @@ def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 			status=405
 		)
 	
+	try:
+		data = json.loads(request.body.decode("utf-8"))
+	except json.JSONDecodeError:
+		return HttpResponsBadRequest("Invalid JSON")
+
 	# check if the code is provided
-	code = request.POST.get("code")
+	code = data.get("code")
 
 	if code is None:
-		return HttpResponse("Code not provided", status=400)
+		code_msg = ""
+
+		for key in request.POST:
+			code_msg += key
+
+		return HttpResponse("Code not provided\n" + code_msg, status=400)
 	
 	if not code.strip():
 		message = "Code is empty." if len(code) == 0 else "Code consists of only whitespace.\n" + code

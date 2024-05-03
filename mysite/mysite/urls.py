@@ -1,9 +1,11 @@
 from . import settings
+from translate import views
 from django.contrib import admin
 from django.urls import include, path
 
 
 urlpatterns = [
+	path("csrf/", views.get_csrf),
 	path("admin/", admin.site.urls),
 	path("translate/", include("translate.urls")),
 ]

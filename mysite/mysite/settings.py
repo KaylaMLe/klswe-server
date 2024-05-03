@@ -5,123 +5,12 @@ from pathlib import Path
 
 load_dotenv()
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-SECRET_KEY = os.environ["SECRET_KEY"]
-
-CSRF_COOKIE_SECURE = True
-
-SESSION_COOKIE_SECURE = True
-
-SECURE_HSTS_SECONDS = 60
-
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-
-SECURE_HSTS_PRELOAD = True
-
-SECURE_SSL_REDIRECT = True
-
-DEBUG = os.environ["DEBUG"] == "True"
-
 ALLOWED_HOSTS = [
 	"localhost",
 	"api.klswe.com",
+    os.environ["BACKEND_IP"],
+    os.environ["BACKEND_IPV4_DNS"]
 ]
-
-CORS_ALLOW_HEADERS = [
-    "accept",
-    "accept-encoding",
-    "authorization",
-    "content-type",
-    "dnt",
-    "origin",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-]
-
-CORS_ALLOW_METHODS = [
-    "DELETE",
-    "GET",
-    "OPTIONS",
-    "PATCH",
-    "POST",
-    "PUT",
-]
-
-CORS_ALLOW_ALL_ORIGINS = False
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost",
-    "https://www.klswe.com",
-    "https://klswe.com",
-]
-
-INTERNAL_IPS = [
-	"127.0.0.1",
-]
-
-# Application definition
-
-INSTALLED_APPS = [
-    "corsheaders",
-	"debug_toolbar",
-	"django.contrib.admin",
-	"django.contrib.auth",
-	"django.contrib.contenttypes",
-	"django.contrib.messages",
-	"django.contrib.sessions",
-	"django.contrib.staticfiles",
-	"translate.apps.TranslateConfig",
-]
-
-MIDDLEWARE = [
-	"debug_toolbar.middleware.DebugToolbarMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
-	"django.middleware.security.SecurityMiddleware",
-	"django.contrib.sessions.middleware.SessionMiddleware",
-	"django.middleware.common.CommonMiddleware",
-	"django.middleware.csrf.CsrfViewMiddleware",
-	"django.contrib.auth.middleware.AuthenticationMiddleware",
-	"django.contrib.messages.middleware.MessageMiddleware",
-	"django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
-
-ROOT_URLCONF = "mysite.urls"
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-STATIC_URL = "static/"
-
-TEMPLATES = [{
-	"BACKEND": "django.template.backends.django.DjangoTemplates",
-	"DIRS": [BASE_DIR / "templates"],
-	"APP_DIRS": True,
-	"OPTIONS": {
-		"context_processors": [
-			"django.template.context_processors.debug",
-			"django.template.context_processors.request",
-			"django.contrib.auth.context_processors.auth",
-			"django.contrib.messages.context_processors.messages",
-		],
-	},
-}]
-
-WSGI_APPLICATION = "mysite.wsgi.application"
-
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-DATABASES = {
-	"default": {
-		"ENGINE": "django.db.backends.sqlite3",
-		"NAME": BASE_DIR / "db.sqlite3",
-	}
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -141,11 +30,101 @@ AUTH_PASSWORD_VALIDATORS = [
 	},
 ]
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+	"http://localhost",
+	"https://www.klswe.com",
+	"https://klswe.com",
+	"https://" + os.environ["FRONTEND_IP"],
+]
+
+CSRF_COOKIE_HTTPONLY = False
+
+CSRF_COOKIE_SAMESITE = "None"
+
+CSRF_COOKIE_SECURE = True
+
+CSRF_TRUSTED_ORIGINS = ["https://klswe.com", "https://www.klswe.com"]
+
+# Application definition
+# Database
+# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
+DATABASES = {
+	"default": {
+		"ENGINE": "django.db.backends.sqlite3",
+		"NAME": BASE_DIR / "db.sqlite3",
+	}
+}
+
+DEBUG = os.environ["DEBUG"] == "True"
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+INSTALLED_APPS = [
+	"debug_toolbar",
+    "corsheaders",
+	"django.contrib.admin",
+	"django.contrib.auth",
+	"django.contrib.contenttypes",
+	"django.contrib.messages",
+	"django.contrib.sessions",
+	"django.contrib.staticfiles",
+	"translate.apps.TranslateConfig",
+]
+
+INTERNAL_IPS = [
+	"localhost",
+]
 
 LANGUAGE_CODE = "en-us"
+
+MIDDLEWARE = [
+	"debug_toolbar.middleware.DebugToolbarMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+	"django.middleware.security.SecurityMiddleware",
+	"django.contrib.sessions.middleware.SessionMiddleware",
+	"django.middleware.common.CommonMiddleware",
+	"django.middleware.csrf.CsrfViewMiddleware",
+	"django.contrib.auth.middleware.AuthenticationMiddleware",
+	"django.contrib.messages.middleware.MessageMiddleware",
+	"django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+ROOT_URLCONF = "mysite.urls"
+
+SECRET_KEY = os.environ["SECRET_KEY"]
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+SECURE_HSTS_PRELOAD = True
+
+SECURE_HSTS_SECONDS = 60
+
+SECURE_SSL_REDIRECT = True 
+
+SESSION_COOKIE_SECURE = True
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATIC_URL = "static/"
+
+TEMPLATES = [{
+	"BACKEND": "django.template.backends.django.DjangoTemplates",
+	"DIRS": [BASE_DIR / "templates"],
+	"APP_DIRS": True,
+	"OPTIONS": {
+		"context_processors": [
+			"django.template.context_processors.debug",
+			"django.template.context_processors.request",
+			"django.contrib.auth.context_processors.auth",
+			"django.contrib.messages.context_processors.messages",
+		],
+	},
+}]
 
 TIME_ZONE = "America/Los_Angeles"
 
@@ -153,14 +132,5 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-STATIC_URL = "static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+WSGI_APPLICATION = "mysite.wsgi.application"
 
