@@ -21,7 +21,7 @@ def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 	try:
 		data = json.loads(request.body.decode("utf-8"))
 	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON", status-400)
+		return HttpResponse("Invalid JSON", status=400)
 
 	# check if the code is provided
 	code = data.get("code")
