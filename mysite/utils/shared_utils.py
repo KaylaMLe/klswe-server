@@ -1,4 +1,5 @@
 from django.http import HttpRequest, HttpResponse
+import json
 
 
 def validate_code_request(request: HttpRequest) -> str | HttpResponse:
@@ -11,9 +12,11 @@ def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 			status=405
 		)
 
-	# check if the code is provided
-	code = request.POST.get("code")
+	# load code from json request
+	data = json.loads(request.body)
+	code = data.get("code")
 
+	# check if the code is provided
 	if code is None:
 		code_msg = ""
 
