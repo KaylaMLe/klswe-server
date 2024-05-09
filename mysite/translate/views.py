@@ -17,14 +17,9 @@ def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 			""",
 			status=405
 		)
-	
-	try:
-		data = json.loads(request.body.decode("utf-8"))
-	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON", status=400)
 
 	# check if the code is provided
-	code = data.get("code")
+	code = request.POST.get("code")
 
 	if code is None:
 		code_msg = ""
