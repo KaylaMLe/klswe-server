@@ -1,5 +1,4 @@
 from . import settings
-from translate import views
 from django.contrib import admin
 from django.urls import include, path
 
@@ -7,6 +6,7 @@ from django.urls import include, path
 urlpatterns = [
 	path("admin/", admin.site.urls),
 	path("translate/", include("translate.urls")),
+	path("store-code/", include("store_code.urls")),
 ]
 
 if settings.DEBUG:

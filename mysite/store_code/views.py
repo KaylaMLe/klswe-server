@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse
-from django.middleware.csrf import get_token
-from .gemini.translate import translate
+from django.shortcuts import get_object_or_404
+from .models import CodeText
 
 
 def validate_code_request(request: HttpRequest) -> str | HttpResponse:
@@ -31,11 +31,30 @@ def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 	
 	return code
 
-def translate_code(request: HttpRequest) -> HttpResponse:
-	csrf_token = get_token(request)
+def store_code_text(request: HttpRequest) -> HttpResponse:
 	code_or_error = validate_code_request(request)
 
 	if isinstance(code_or_error, HttpResponse):
 		return code_or_error
 
-	return translate(code_or_error)
+	code_text = CodeText(code=code_or_error)
+	code_text.save()
+
+	return HttpResponse("Code saved with id: " + str(code_text.pk))
+
+def get_code_text(request: HttpRequest, pk: int) -> HttpResponse:
+	if request.method != "GET":
+		return HttpResponse(f"Expected GET request but got a {request.method} request.", status=405)
+	
+	code_text = get_object_or_404(CodeText, pk=pk)
+
+	return HttpResponse(code_text.code, content_type="text/plain")
+
+def delete_code_text(request: HttpRequest, pk: int) -> HttpResponse:
+	if request.method != "DELETE":
+		return HttpResponse(f"Expected DELETE request but got a {request.method} request.", status=405)
+
+	code_text = get_object_or_404(CodeText, pk=pk)
+	code_text.delete()
+
+	return HttpResponse("Code deleted with id: " + str(pk))
