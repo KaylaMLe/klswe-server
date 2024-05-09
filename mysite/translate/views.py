@@ -1,17 +1,29 @@
 from django.http import HttpRequest, HttpResponse
-from django.middleware.csrf import get_token
-import google.generativeai as genai
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_http_methods
 from utils.shared_utils import validate_code_request
+from .gemini.translator import Translator
 
 
+model = Translator()
+
+
+@ensure_csrf_cookie
+@require_http_methods(["GET", "POST"])
 def translate_code(request: HttpRequest) -> HttpResponse:
-	csrf_token = get_token(request)
-	code_or_error = validate_code_request(request)
+	if request.method == "POST":
+		code_or_error = validate_code_request(request)
 
-	if isinstance(code_or_error, HttpResponse):
-		return code_or_error
+		if isinstance(code_or_error, HttpResponse):
+			return code_or_error
 
-	model = genai.GenerativeModel(model_name="tunedModels/js-to-ts-model-001")
-	typescript_translation = model.generate_content(code_or_error)
-	
-	return HttpResponse(typescript_translation.text)
+		translation = model.translate(code_or_error)
+		
+		return HttpResponse(translation)
+	elif request.method == "GET":
+		return HttpResponse()
+	else:
+		return HttpResponse(
+			f"Expected GET or POST request but got a {request.method} request.",
+			status=405
+		)
