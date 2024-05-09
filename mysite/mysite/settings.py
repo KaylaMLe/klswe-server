@@ -41,24 +41,16 @@ CORS_ALLOWED_ORIGINS = [
 	"https://" + os.environ["FRONTEND_IP"],
 ]
 
-CORS_TRUSTED_ORIGINS = [
-	"http://localhost",
-	"https://www.klswe.com",
-	"https://klswe.com",
-	"https://" + os.environ["FRONTEND_IP"],
-]
-
 CSRF_COOKIE_DOMAIN = ".klswe.com"
 
 CSRF_COOKIE_HTTPONLY = False
 
-CSRF_COOKIE_PATH = "/"
-
-CSRF_COOKIE_SAMESITE = "None"
-
 CSRF_COOKIE_SECURE = True
 
-CSRF_TRUSTED_ORIGINS = ["https://klswe.com", "https://www.klswe.com"]
+CSRF_TRUSTED_ORIGINS = [
+	"https://klswe.com",
+	"https://www.klswe.com",
+]
 
 # Application definition
 # Database
