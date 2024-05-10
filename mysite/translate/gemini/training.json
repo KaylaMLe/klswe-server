@@ -1,0 +1,170 @@
+[
+  {
+    "javascript": "./training/simple1.js",
+    "typescript": "./training/simple1.ts"
+  },
+  {
+    "javascript": "./training/simple2.js",
+    "typescript": "./training/simple2.ts"
+  },
+  {
+    "javascript": "./training/simple3.js",
+    "typescript": "./training/simple3.ts"
+  },
+  {
+    "javascript": "./training/simple4.js",
+    "typescript": "./training/simple4.ts"
+  },
+  {
+    "javascript": "./training/simple5.js",
+    "typescript": "./training/simple5.ts"
+  },
+  {
+    "javascript": "./training/simple6.js",
+    "typescript": "./training/simple6.ts"
+  },
+  {
+    "javascript": "./training/simple7.js",
+    "typescript": "./training/simple7.ts"
+  },
+  {
+    "javascript": "./training/simple8.js",
+    "typescript": "./training/simple8.ts"
+  },
+  {
+    "javascript": "./training/simple9.js",
+    "typescript": "./training/simple9.ts"
+  },
+  {
+    "javascript": "./training/simple10.js",
+    "typescript": "./training/simple10.ts"
+  },
+  {
+    "javascript": "./training/AboutMe.jsx",
+    "typescript": "./training/AboutMe.tsx"
+  },
+  {
+    "javascript": "./training/AboutMe.test.jsx",
+    "typescript": "./training/AboutMe.test.tsx"
+  },
+  {
+    "javascript": "./training/AboutMeStyles.js",
+    "typescript": "./training/AboutMeStyles.ts"
+  },
+  {
+    "javascript": "./training/DropDownMenu.jsx",
+    "typescript": "./training/DropDownMenu.tsx"
+  },
+  {
+    "javascript": "./training/DropDownMenu.test.jsx",
+    "typescript": "./training/DropDownMenu.test.tsx"
+  },
+  {
+    "javascript": "./training/DropDownMenuStyles.js",
+    "typescript": "./training/DropDownMenuStyles.ts"
+  },
+  {
+    "javascript": "./training/FlexboxFun.jsx",
+    "typescript": "./training/FlexboxFun.tsx"
+  },
+  {
+    "javascript": "./training/Home.jsx",
+    "typescript": "./training/Home.tsx"
+  },
+  {
+    "javascript": "./training/Home.test.jsx",
+    "typescript": "./training/Home.test.tsx"
+  },
+  {
+    "javascript": "./training/HomeStyles.js",
+    "typescript": "./training/HomeStyles.ts"
+  },
+  {
+    "javascript": "./training/LinkButtons.jsx",
+    "typescript": "./training/LinkButtons.tsx"
+  },
+  {
+    "javascript": "./training/Login.jsx",
+    "typescript": "./training/Login.tsx"
+  },
+  {
+    "javascript": "./training/MainTitle.jsx",
+    "typescript": "./training/MainTitle.tsx"
+  },
+  {
+    "javascript": "./training/MainTitleStyles.js",
+    "typescript": "./training/MainTitleStyles.ts"
+  },
+  {
+    "javascript": "./training/NavBar.jsx",
+    "typescript": "./training/NavBar.tsx"
+  },
+  {
+    "javascript": "./training/NavBar.test.jsx",
+    "typescript": "./training/NavBar.test.tsx"
+  },
+  {
+    "javascript": "./training/NavBarStyles.js",
+    "typescript": "./training/NavBarStyles.ts"
+  },
+  {
+    "javascript": "./training/NotFoundError.jsx",
+    "typescript": "./training/NotFoundError.tsx"
+  },
+  {
+    "javascript": "./training/Page.jsx",
+    "typescript": "./training/Page.tsx"
+  },
+  {
+    "javascript": "./training/PageNumberContext.jsx",
+    "typescript": "./training/PageNumberContext.tsx"
+  },
+  {
+    "javascript": "./training/PageNumbers.js",
+    "typescript": "./training/PageNumbers.ts"
+  },
+  {
+    "javascript": "./training/PageStyles.js",
+    "typescript": "./training/PageStyles.ts"
+  },
+  {
+    "javascript": "./training/ResponsiveComponent.jsx",
+    "typescript": "./training/ResponsiveComponent.tsx"
+  },
+  {
+    "javascript": "./training/ResponsiveNavComponent.jsx",
+    "typescript": "./training/ResponsiveNavComponent.tsx"
+  },
+  {
+    "javascript": "./training/ToggleStyledComponent.jsx",
+    "typescript": "./training/ToggleStyledComponent.tsx"
+  },
+  {
+    "javascript": "./training/ViewPortContext.jsx",
+    "typescript": "./training/ViewPortContext.tsx"
+  },
+  {
+    "javascript": "./training/ViewPortContext.test.jsx",
+    "typescript": "./training/ViewPortContext.test.tsx"
+  },
+  {
+    "javascript": "./training/basic1.js",
+    "typescript": "./training/basic1.ts"
+  },
+  {
+    "javascript": "./training/basic2.js",
+    "typescript": "./training/basic2.ts"
+  },
+  {
+    "javascript": "./training/constants.js",
+    "typescript": "./training/constants.ts"
+  },
+  {
+    "javascript": "./training/index.jsx",
+    "typescript": "./training/index.tsx"
+  },
+  {
+    "javascript": "./training/routes.js",
+    "typescript": "./training/routes.ts"
+  }
+]

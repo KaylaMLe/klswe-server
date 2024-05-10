@@ -34,3 +34,10 @@ def create_trained_model(id: str) -> None:
 	)
 	
 	print(genai.get_tuned_model("tunedModels/" + id))
+
+
+if __name__ == "__main__":
+#    for m in genai.list_models():
+#        if "createTunedModel" in m.supported_generation_methods:
+#            print(m)
+    create_trained_model("js-to-ts-model-004")

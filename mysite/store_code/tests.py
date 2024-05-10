@@ -3,7 +3,7 @@ from django.urls import reverse
 from .models import CodeText
 
 
-class TranslateTestCase(TestCase):
+class StoreCodeTestCase(TestCase):
 	def test_insecure_request_redirect(self):
 		"""Test that an insecure request is redirected to a secure request.
 		

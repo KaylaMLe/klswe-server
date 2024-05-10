@@ -74,4 +74,5 @@ def test_prompt(id: str) -> None:
 	print(typescript_translation.text)
 
 if __name__ == "__main__":
-	test_prompt("js-to-ts-model-001")
+    check_model("js-to-ts-model-004")
+#	test_prompt("js-to-ts-model-001")
