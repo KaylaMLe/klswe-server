@@ -40,4 +40,4 @@ if __name__ == "__main__":
 #    for m in genai.list_models():
 #        if "createTunedModel" in m.supported_generation_methods:
 #            print(m)
-    create_trained_model("js-to-ts-model-004")
+    create_trained_model("js-to-ts-model-005")
