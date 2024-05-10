@@ -17,6 +17,7 @@ class TranslateTestCase(TestCase):
 		response = self.client.post(
 			reverse("translate:translate_code"),
 			{"code": test_js},
+			content_type="application/json",
 			secure=True
 		)
 

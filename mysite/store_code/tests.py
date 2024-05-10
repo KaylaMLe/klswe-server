@@ -24,6 +24,7 @@ class StoreCodeTestCase(TestCase):
 		response = self.client.post(
 			reverse("store-code:store_code_text"),
 			{"code": "Test code"},
+			content_type="application/json",
 			secure=True
 		)
 		self.assertEqual(response.status_code, 200)
