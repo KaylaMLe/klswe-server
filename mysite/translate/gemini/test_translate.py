@@ -1,7 +1,12 @@
+from dotenv import load_dotenv
 import google.generativeai as genai
 import matplotlib.pyplot as plt
+import os
 import pandas as pd
 import seaborn as sns
+
+
+load_dotenv()
 
 
 def evaluate_tuned_model(id: str) -> None:
@@ -74,5 +79,5 @@ def test_prompt(id: str) -> None:
 	print(typescript_translation.text)
 
 if __name__ == "__main__":
-    check_model("js-to-ts-model-004")
+    check_model(os.environ["CURRENT_MODEL_ID"])
 #	test_prompt("js-to-ts-model-001")

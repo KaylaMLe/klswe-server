@@ -1,5 +1,10 @@
+from dotenv import load_dotenv
 import google.generativeai as genai
 import json
+import os
+
+
+load_dotenv()
 
 
 def load_file_content(file_path: str) -> str:
@@ -40,4 +45,4 @@ if __name__ == "__main__":
 #    for m in genai.list_models():
 #        if "createTunedModel" in m.supported_generation_methods:
 #            print(m)
-    create_trained_model("js-to-ts-model-005")
+    create_trained_model(os.environ["CURRENT_MODEL_ID"])
