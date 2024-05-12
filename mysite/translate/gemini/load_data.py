@@ -34,8 +34,7 @@ def create_trained_model(id: str) -> None:
 		id=id,
 		source_model="models/gemini-1.0-pro-001",
 		training_data=training_data,
-		batch_size=16,
-		epoch_count=100,
+		epoch_count=15,
 	)
 	
 	print(genai.get_tuned_model("tunedModels/" + id))
