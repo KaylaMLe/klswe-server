@@ -46,3 +46,6 @@ training.json
 # Database files
 *.sqlite3
 
+# Misc
+client*.json
+
