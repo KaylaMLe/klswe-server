@@ -1,81 +1,30 @@
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.middleware.csrf import get_token
-from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpRequest, HttpResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
-import json
-from .gemini.translate import translate
-from .models import CodeText
+from utils.shared_utils import validate_code_request
+from .gemini.translator import Translator
 
 
-def validate_code_request(request: HttpRequest) -> str | HttpResponse:
-    # redirection changes the request method to GET even if the original request was POST
-	if request.method != "POST":
+model = Translator()
+
+
+@ensure_csrf_cookie
+@require_http_methods(["GET", "POST"])
+def translate_code(request: HttpRequest) -> HttpResponse:
+	if request.method == "POST":
+		code_or_error = validate_code_request(request)
+
+		if isinstance(code_or_error, HttpResponse):
+			return code_or_error
+
+		translation = model.translate(code_or_error)
+		
+		return HttpResponse(translation)
+	elif request.method == "GET":
+		return HttpResponse()
+	else:
 		return HttpResponse(
-			f"""Expected POST request but got a {request.method} request.
-			Did an unexpected redirect occur?
-			""",
+			f"Expected GET or POST request but got a {request.method} request.",
 			status=405
 		)
-	
-	try:
-		data = json.loads(request.body.decode("utf-8"))
-	except json.JSONDecodeError:
-		return HttpResponse("Invalid JSON", status=400)
 
-	# check if the code is provided
-	code = data.get("code")
-
-	if code is None:
-		code_msg = ""
-
-		for key in request.POST:
-			code_msg += key
-
-		return HttpResponse("Code not provided\n" + code_msg, status=400)
-	
-	if not code.strip():
-		message = "Code is empty." if len(code) == 0 else "Code consists of only whitespace.\n" + code
-
-		return HttpResponse(message, status=400)
-	
-	return code
-
-
-@csrf_exempt
-def translate_code(request: HttpRequest) -> HttpResponse:
-	csrf_token = get_token(request)
-	code_or_error = validate_code_request(request)
-
-	if isinstance(code_or_error, HttpResponse):
-		return code_or_error
-
-	return translate(code_or_error)
-
-def store_code_text(request: HttpRequest) -> HttpResponse:
-	code_or_error = validate_code_request(request)
-
-	if isinstance(code_or_error, HttpResponse):
-		return code_or_error
-
-	code_text = CodeText(code=code_or_error)
-	code_text.save()
-
-	return HttpResponse("Code saved with id: " + str(code_text.pk))
-
-def get_code_text(request: HttpRequest, pk: int) -> HttpResponse:
-	if request.method != "GET":
-		return HttpResponse(f"Expected GET request but got a {request.method} request.", status=405)
-	
-	code_text = get_object_or_404(CodeText, pk=pk)
-
-	return HttpResponse(code_text.code, content_type="text/plain")
-
-def delete_code_text(request: HttpRequest, pk: int) -> HttpResponse:
-	if request.method != "DELETE":
-		return HttpResponse(f"Expected DELETE request but got a {request.method} request.", status=405)
-
-	code_text = get_object_or_404(CodeText, pk=pk)
-	code_text.delete()
-
-	return HttpResponse("Code deleted with id: " + str(pk))

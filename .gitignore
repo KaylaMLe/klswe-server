@@ -38,5 +38,11 @@ mysite/staticfiles
 # Python
 __pycache__/
 
+# Training files
+training/
+training_old/
+training.json
+
 # Database files
 *.sqlite3
+

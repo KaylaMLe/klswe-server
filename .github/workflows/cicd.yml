@@ -3,7 +3,7 @@ name: CI/CD Workflow
 on:
   push:
     branches:
-      - main
+      - prod
 
 jobs:
   deploy:
@@ -11,24 +11,20 @@ jobs:
 
     steps:
       - name: Fetch and rebase changes
-        run: git fetch origin && git rebase origin/main
+        run: git fetch origin && git rebase origin/prod
         working-directory: ${{ secrets.ROOT_PATH }}
 
       - name: Activate virtualenv
         run: source .venv/bin/activate
         working-directory: ${{ secrets.ROOT_PATH }}
 
-      - name: Install dependencies
+      - name: Update dependencies
         run: pip install -r .venv/requirements.txt
         working-directory: ${{ secrets.ROOT_PATH }}
 
       - name: Run Django tests
         run: python manage.py test
         working-directory: ${{ secrets.ROOT_PATH }}/mysite
-
-      - name: Update dependencies
-        run: pip install -r .venv/requirements.txt
-        working-directory: ${{ secrets.ROOT_PATH }}
 
       - name: Refresh Gunicorn
         run: source ResetGunicornMaster.sh

@@ -8,8 +8,8 @@ load_dotenv()
 ALLOWED_HOSTS = [
 	"localhost",
 	"api.klswe.com",
-    os.environ["BACKEND_IP"],
-    os.environ["BACKEND_IPV4_DNS"]
+		os.environ["BACKEND_IP"],
+		os.environ["BACKEND_IPV4_DNS"]
 ]
 
 # Password validation
@@ -45,13 +45,12 @@ CSRF_COOKIE_DOMAIN = ".klswe.com"
 
 CSRF_COOKIE_HTTPONLY = False
 
-CSRF_COOKIE_PATH = "/"
-
-CSRF_COOKIE_SAMESITE = "None"
-
 CSRF_COOKIE_SECURE = True
 
-CSRF_TRUSTED_ORIGINS = ["https://klswe.com", "https://www.klswe.com"]
+CSRF_TRUSTED_ORIGINS = [
+	"https://klswe.com",
+	"https://www.klswe.com",
+]
 
 # Application definition
 # Database
@@ -70,7 +69,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 INSTALLED_APPS = [
 	"debug_toolbar",
-    "corsheaders",
+	"corsheaders",
 	"django.contrib.admin",
 	"django.contrib.auth",
 	"django.contrib.contenttypes",
@@ -78,6 +77,7 @@ INSTALLED_APPS = [
 	"django.contrib.sessions",
 	"django.contrib.staticfiles",
 	"translate.apps.TranslateConfig",
+	"store_code.apps.StoreCodeConfig",
 ]
 
 INTERNAL_IPS = [
@@ -88,7 +88,7 @@ LANGUAGE_CODE = "en-us"
 
 MIDDLEWARE = [
 	"debug_toolbar.middleware.DebugToolbarMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
+	"corsheaders.middleware.CorsMiddleware",
 	"django.middleware.security.SecurityMiddleware",
 	"django.contrib.sessions.middleware.SessionMiddleware",
 	"django.middleware.common.CommonMiddleware",
@@ -137,4 +137,3 @@ USE_I18N = True
 USE_TZ = True
 
 WSGI_APPLICATION = "mysite.wsgi.application"
-
