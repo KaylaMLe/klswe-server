@@ -78,6 +78,7 @@ INSTALLED_APPS = [
 	"django.contrib.staticfiles",
 	"translate.apps.TranslateConfig",
 	"store_code.apps.StoreCodeConfig",
+	"pdf_to_form.apps.PdfToFormConfig",
 ]
 
 INTERNAL_IPS = [

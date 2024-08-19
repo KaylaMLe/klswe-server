@@ -7,6 +7,7 @@ urlpatterns = [
 	path("admin/", admin.site.urls),
 	path("translate/", include("translate.urls")),
 	path("store-code/", include("store_code.urls")),
+	path("pdf-to-form/", include("pdf_to_form.urls")),
 ]
 
 if settings.DEBUG:
