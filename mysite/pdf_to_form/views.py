@@ -36,7 +36,12 @@ def receive_pdf(request: HttpRequest) -> HttpResponse:
 		for target in target_chars:
 			char_instances = page.search_for(target)
 
-			for inst in char_instances:
-				page.insert_text(inst[:2], " ", fontsize=12)
+			for rect_num in range(len(char_instances)):
+				field_name = target_chars[target] + "_" + str(page_num) + "_" + str(rect_num)
+				widget = pymupdf.Widget()
+				widget.field_name = field_name
+				widget.rect = char_instances[rect_num]
+				widget.field_type = pymupdf.PDF_WIDGET_TYPE_CHECKBOX
+				page.add_widget(widget)
 
-	return HttpResponse("Success", status=200)
+	return HttpResponse(parsed_pdf, content_type="application/pdf")
