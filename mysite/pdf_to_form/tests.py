@@ -1,21 +1,34 @@
 from django.test import TestCase, Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+import pymupdf
+from os import path
 
 
 class ReceivePdfTestCase(TestCase):
 	def setUp(self):
 		self.client = Client()
 		self.url = reverse("pdf-to-form:receive_pdf")
+		self.snapshots_dir = path.join(path.dirname(__file__), "snapshots")
 
+	# checks if the view can receive a PDF file and return a PDF with the expected checkbox
 	def test_receive_pdf_with_valid_pdf(self):
-		# Create a simple PDF file
-		pdf_content = b"%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>\nendobj\nxref\n0 4\n0000000000 65535 f \n0000000010 00000 n \n0000000074 00000 n \n0000000178 00000 n \ntrailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n278\n%%EOF"
-		uploaded_file = SimpleUploadedFile("test.pdf", pdf_content, content_type="application/pdf")
-
+		pdf_content = pdf_to_binary(path.join(self.snapshots_dir, "checkbox_original.pdf"))
+		uploaded_file = SimpleUploadedFile(
+			"checkbox_original.pdf", pdf_content, content_type="application/pdf"
+		)
 		response = self.client.post(self.url, {"pdf": uploaded_file}, secure=True)
 
-		self.assertEqual(response.status_code, 200)  # Adjust the expected status code as needed
+		# uncomment to save new pdf snapshot
+		# with open(path.join(self.snapshots_dir, "checkbox_output.pdf"), "wb") as file:
+		# 	file.write(response.content)
+
+		expected_output = pdf_to_binary(path.join(self.snapshots_dir, "checkbox_output.pdf"))
+		expected_checkbox = get_annotation_rects(expected_output)
+		actual_checkbox = get_annotation_rects(response.content)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(expected_checkbox, actual_checkbox)
 
 	def test_receive_pdf_with_invalid_file_type(self):
 		# Create a non-PDF file
@@ -31,4 +44,24 @@ class ReceivePdfTestCase(TestCase):
 		response = self.client.post(self.url, {}, secure=True)
 
 		self.assertEqual(response.status_code, 400)
-		self.assertIn("Either no file uploaded or incorrect form field name", response.content.decode())
+		self.assertIn(
+			"Either no file uploaded or incorrect form field name",
+			response.content.decode()
+		)
+
+
+def pdf_to_binary(file_path: str) -> bytes:
+	with open(file_path, "rb") as file:
+		return file.read()
+	
+def get_annotation_rects(pdf_binary: bytes) -> list[pymupdf.Rect]:
+	pdf = pymupdf.Document(stream=pdf_binary)
+	rects = []
+
+	for page_num in range(len(pdf)):
+		page = pdf[page_num]
+
+		for annot in page.annots():
+			rects.append(annot.rect)
+	
+	return rects

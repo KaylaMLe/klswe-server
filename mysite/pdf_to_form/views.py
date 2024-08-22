@@ -1,10 +1,9 @@
 from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpRequest, HttpResponse
+import io
 import pymupdf
+from .target_chars import target_chars, CHECK_BOX
 
-
-target_chars = { "◻": "checkbox" }
-checkbox_dim = { "height": 20, "width": 20 }
 
 def receive_pdf(request: HttpRequest) -> HttpResponse:
 	if "pdf" not in request.FILES:
@@ -34,14 +33,46 @@ def receive_pdf(request: HttpRequest) -> HttpResponse:
 		page = parsed_pdf[page_num]
 
 		for target in target_chars:
+			match target_chars[target]:
+				case CHECK_BOX:
+					make_widget = make_checkbox
+
 			char_instances = page.search_for(target)
 
 			for rect_num in range(len(char_instances)):
-				field_name = target_chars[target] + "_" + str(page_num) + "_" + str(rect_num)
-				widget = pymupdf.Widget()
-				widget.field_name = field_name
-				widget.rect = char_instances[rect_num]
-				widget.field_type = pymupdf.PDF_WIDGET_TYPE_CHECKBOX
-				page.add_widget(widget)
+				page.draw_rect(char_instances[rect_num], color=(1, 1, 1), fill=(1, 1, 1))
+				page.add_widget(make_widget(page_num, rect_num, char_instances))
 
-	return HttpResponse(parsed_pdf, content_type="application/pdf")
+	output_binary = io.BytesIO()
+	parsed_pdf.save(output_binary)
+	output_binary.seek(0)
+	parsed_pdf.close()
+
+	return HttpResponse(output_binary, content_type="application/pdf")
+
+def make_checkbox(page_num: int, rect_num: int, instances: list[pymupdf.Rect]) -> pymupdf.Widget:
+	field_name = CHECK_BOX + "_" + str(page_num) + "_" + str(rect_num)
+
+	[x0, y0, x1, y1] = instances[rect_num][:4]
+	diff = ((x1 - x0) - (y1 - y0)) / 2
+
+	# if the rectangle is wider than it is tall
+	if diff > 0:
+		x0 += diff
+		x1 -= diff
+	# if the rectangle is taller than it is wide
+	elif diff < 0:
+		y0 += abs(diff)
+		y1 -= abs(diff)
+
+	rect = pymupdf.Rect(x0=x0, y0=y0, x1=x1, y1=y1)
+
+	widget = pymupdf.Widget()
+	widget.field_name = field_name
+	widget.rect = rect
+	widget.field_type = pymupdf.PDF_WIDGET_TYPE_CHECKBOX
+
+	widget.border_width = 1
+	widget.border_color = (0, 0, 0)
+
+	return widget
