@@ -1,11 +1,24 @@
 from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpRequest, HttpResponse
+from django.views.decorators.http import require_http_methods
 import io
 import pymupdf
 from .target_chars import target_chars, CHECK_BOX
 
 
+@require_http_methods(["GET", "POST"])
 def receive_pdf(request: HttpRequest) -> HttpResponse:
+	if request.method == "POST":
+		return convert_pdf(request)
+	elif request.method == "GET":
+		return HttpResponse()
+	else:
+		return HttpResponse(
+			f"Expected GET or POST request but got a {request.method} request.",
+			status=405
+		)
+
+def convert_pdf(request: HttpRequest) -> HttpResponse:
 	if "pdf" not in request.FILES:
 		return HttpResponse(
 			"Either no file uploaded or incorrect form field name",
