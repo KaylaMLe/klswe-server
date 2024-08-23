@@ -8,8 +8,9 @@ load_dotenv()
 ALLOWED_HOSTS = [
 	"localhost",
 	"api.klswe.com",
-		os.environ["BACKEND_IP"],
-		os.environ["BACKEND_IPV4_DNS"]
+	os.environ["BACKEND_IP"],
+	os.environ["BACKEND_IPV4_DNS"],
+	os.environ["MY_IP"]
 ]
 
 # Password validation
@@ -39,6 +40,7 @@ CORS_ALLOWED_ORIGINS = [
 	"https://www.klswe.com",
 	"https://klswe.com",
 	"https://" + os.environ["FRONTEND_IP"],
+	"https://" + os.environ["MY_IP"],
 ]
 
 CSRF_COOKIE_DOMAIN = ".klswe.com"
