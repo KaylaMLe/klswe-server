@@ -1,11 +1,13 @@
 from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpRequest, HttpResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
 import io
 import pymupdf
 from .target_chars import target_chars, CHECK_BOX
 
 
+@ensure_csrf_cookie
 @require_http_methods(["GET", "POST"])
 def receive_pdf(request: HttpRequest) -> HttpResponse:
 	if request.method == "POST":
