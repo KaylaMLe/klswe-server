@@ -8,6 +8,7 @@ urlpatterns = [
 	path("translate/", include("translate.urls")),
 	path("store-code/", include("store_code.urls")),
 	path("pdf-to-form/", include("pdf_to_form.urls")),
+	path("csrf-setter/", include("csrf_setter.urls")),
 ]
 
 if settings.DEBUG:
