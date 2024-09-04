@@ -82,6 +82,7 @@ INSTALLED_APPS = [
 	"translate.apps.TranslateConfig",
 	"store_code.apps.StoreCodeConfig",
 	"pdf_to_form.apps.PdfToFormConfig",
+	"csrf_setter.apps.CsrfSetterConfig",
 ]
 
 INTERNAL_IPS = [
