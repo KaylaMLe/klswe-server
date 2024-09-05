@@ -16,13 +16,13 @@ def increment_page_views(request: HttpRequest, url: str) -> HttpResponse:
 		return HttpResponse(f"Page views for {url} incremented")
 
 @require_http_methods(["POST"])
-def increment_form_submissions(request: HttpRequest, pk: int) -> HttpResponse:
-	form_stats, created = FormStats.objects.get_or_create(pk=pk)
+def increment_form_submissions(request: HttpRequest, url: str, name: str) -> HttpResponse:
+	form_stats, created = FormStats.objects.get_or_create(url=url, name=name)
 	
 	if created:
-		return HttpResponse(f"Began tracking form submissions for form with id {pk}")
+		return HttpResponse(f"Began tracking submissions for form with {name} on {url}")
 	else:
 		form_stats.submissions += 1
 		form_stats.save()
 
-		return HttpResponse(f"Form submissions for form with id {pk} incremented")
+		return HttpResponse(f"Submissions for form {name} incremented")
