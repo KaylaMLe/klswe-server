@@ -79,10 +79,11 @@ INSTALLED_APPS = [
 	"django.contrib.messages",
 	"django.contrib.sessions",
 	"django.contrib.staticfiles",
+	"csrf_setter.apps.CsrfSetterConfig",
 	"translate.apps.TranslateConfig",
 	"store_code.apps.StoreCodeConfig",
 	"pdf_to_form.apps.PdfToFormConfig",
-	"csrf_setter.apps.CsrfSetterConfig",
+	"traffic_tracker.apps.TrafficTrackerConfig",
 ]
 
 INTERNAL_IPS = [
