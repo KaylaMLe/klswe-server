@@ -5,10 +5,11 @@ from django.urls import include, path
 
 urlpatterns = [
 	path("admin/", admin.site.urls),
+	path("csrf-setter/", include("csrf_setter.urls")),
 	path("translate/", include("translate.urls")),
 	path("store-code/", include("store_code.urls")),
 	path("pdf-to-form/", include("pdf_to_form.urls")),
-	path("csrf-setter/", include("csrf_setter.urls")),
+	path("traffic-tracker/", include("traffic_tracker.urls")),
 ]
 
 if settings.DEBUG:
