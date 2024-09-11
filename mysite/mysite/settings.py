@@ -5,8 +5,11 @@ from pathlib import Path
 
 load_dotenv()
 
+DEBUG = os.environ["DEBUG"] == "True"
+
 ALLOWED_HOSTS = [
 	"localhost",
+	"127.0.0.1",
 	"api.klswe.com",
 	os.environ["BACKEND_IP"],
 	os.environ["BACKEND_IPV4_DNS"],
@@ -43,11 +46,14 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_COOKIE_DOMAIN = ".klswe.com"
 
+if DEBUG:
+	CSRF_COOKIE_DOMAIN = "localhost"
+
 CSRF_COOKIE_HTTPONLY = False
 
 CSRF_COOKIE_SAMESITE = 'None'
 
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = not DEBUG
 
 CSRF_TRUSTED_ORIGINS = [
 	"http://localhost:5173",
@@ -65,8 +71,6 @@ DATABASES = {
 		"NAME": BASE_DIR / "db.sqlite3",
 	}
 }
-
-DEBUG = os.environ["DEBUG"] == "True"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -94,12 +98,12 @@ LANGUAGE_CODE = "en-us"
 
 MIDDLEWARE = [
 	"debug_toolbar.middleware.DebugToolbarMiddleware",
-	"corsheaders.middleware.CorsMiddleware",
 	"django.middleware.security.SecurityMiddleware",
 	"django.contrib.sessions.middleware.SessionMiddleware",
-	"django.middleware.common.CommonMiddleware",
 	"django.middleware.csrf.CsrfViewMiddleware",
 	"django.contrib.auth.middleware.AuthenticationMiddleware",
+	"corsheaders.middleware.CorsMiddleware",
+	"django.middleware.common.CommonMiddleware",
 	"django.contrib.messages.middleware.MessageMiddleware",
 	"django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -114,7 +118,7 @@ SECURE_HSTS_PRELOAD = True
 
 SECURE_HSTS_SECONDS = 60
 
-SECURE_SSL_REDIRECT = True 
+SECURE_SSL_REDIRECT = not DEBUG
 
 SESSION_COOKIE_SECURE = True
 

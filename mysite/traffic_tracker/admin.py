@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import FormStats, PageStats
 
-# Register your models here.
+
+admin.site.register(FormStats)
+admin.site.register(PageStats)
