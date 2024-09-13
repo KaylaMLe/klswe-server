@@ -1,9 +1,10 @@
 from django.http import HttpRequest, HttpResponse
+from functools import wraps
 import json
 
 
 def validate_code_request(request: HttpRequest) -> str | HttpResponse:
-    # redirection changes the request method to GET even if the original request was POST
+	# redirection changes the request method to GET even if the original request was POST
 	if request.method != "POST":
 		return HttpResponse(
 			f"""Expected POST request but got a {request.method} request.
@@ -31,3 +32,14 @@ def validate_code_request(request: HttpRequest) -> str | HttpResponse:
 		return HttpResponse(message, status=400)
 	
 	return code
+
+def preflight_handler():
+	def decorator(view_func):
+		@wraps(view_func)
+		def _wrapped_view(request: HttpRequest, *args, **kwargs) -> HttpResponse:
+			if request.method == "GET":
+				return HttpResponse()
+			
+			return view_func(request, *args, **kwargs)
+		return _wrapped_view
+	return decorator
