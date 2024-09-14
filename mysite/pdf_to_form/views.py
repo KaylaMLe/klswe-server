@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 import io
 import json
 import pymupdf
-from .target_chars import target_chars, CHECK_BOX
+from .target_chars import CHECK_BOX
 
 
 @ensure_csrf_cookie
