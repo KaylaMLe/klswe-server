@@ -3,8 +3,9 @@ from django.http import HttpRequest, HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
 import io
+import json
 import pymupdf
-from .target_chars import target_chars, CHECK_BOX
+from .target_chars import CHECK_BOX
 
 
 @ensure_csrf_cookie
@@ -43,16 +44,17 @@ def convert_pdf(request: HttpRequest) -> HttpResponse:
 
 	pdf_data = uploaded_file.read()
 	parsed_pdf = pymupdf.Document(stream=pdf_data)
+	target_chars = json.loads(request.POST["targetChars"])
 
 	for page_num in range(len(parsed_pdf)):
 		page = parsed_pdf[page_num]
 
 		for target in target_chars:
-			match target_chars[target]:
+			match target["name"]:
 				case CHECK_BOX:
 					make_widget = make_checkbox
 
-			char_instances = page.search_for(target)
+			char_instances = page.search_for(target["char"])
 
 			for rect_num in range(len(char_instances)):
 				page.draw_rect(char_instances[rect_num], color=(1, 1, 1), fill=(1, 1, 1))

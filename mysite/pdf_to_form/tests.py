@@ -17,7 +17,11 @@ class ReceivePdfTestCase(TestCase):
 		uploaded_file = SimpleUploadedFile(
 			"checkbox_original.pdf", pdf_content, content_type="application/pdf"
 		)
-		response = self.client.post(self.url, {"pdf": uploaded_file}, secure=True)
+		response = self.client.post(
+			self.url,
+			{"pdf": uploaded_file, "targetChars": '[{"name": "checkbox", "char": "☐"}]'},
+			secure=True
+		)
 
 		# uncomment to save new pdf snapshot
 		# with open(path.join(self.snapshots_dir, "checkbox_output.pdf"), "wb") as file:
@@ -35,13 +39,21 @@ class ReceivePdfTestCase(TestCase):
 		non_pdf_content = b"This is not a PDF file."
 		uploaded_file = SimpleUploadedFile("test.txt", non_pdf_content, content_type="text/plain")
 
-		response = self.client.post(self.url, {"pdf": uploaded_file}, secure=True)
+		response = self.client.post(
+			self.url,
+			{"pdf": uploaded_file, "targetChars": '[{"name": "checkbox", "char": "☐"}]'},
+			secure=True
+		)
 
 		self.assertEqual(response.status_code, 400)
 		self.assertIn("Expected a PDF file but got a different file type.", response.content.decode())
 
 	def test_receive_pdf_with_no_file(self):
-		response = self.client.post(self.url, {}, secure=True)
+		response = self.client.post(
+			self.url,
+			{"targetChars": '[{"name": "checkbox", "char": "☐"}]'},
+			secure=True
+		)
 
 		self.assertEqual(response.status_code, 400)
 		self.assertIn(
