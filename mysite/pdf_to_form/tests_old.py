@@ -1,8 +1,7 @@
 from django.test import TestCase, Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
-import io
-import PyPDF2
+import pymupdf
 from os import path
 
 
@@ -25,7 +24,7 @@ class ReceivePdfTestCase(TestCase):
 		)
 
 		# uncomment to save new pdf snapshot
-		# with open(path.join(self.snapshots_dir, "checkbox_output2.pdf"), "wb") as file:
+		# with open(path.join(self.snapshots_dir, "checkbox_output.pdf"), "wb") as file:
 		# 	file.write(response.content)
 
 		expected_output = pdf_to_binary(path.join(self.snapshots_dir, "checkbox_output.pdf"))
@@ -67,19 +66,14 @@ def pdf_to_binary(file_path: str) -> bytes:
 	with open(file_path, "rb") as file:
 		return file.read()
 	
-def get_annotation_rects(pdf_binary: bytes) -> list:
-	pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_binary))
+def get_annotation_rects(pdf_binary: bytes) -> list[pymupdf.Rect]:
+	pdf = pymupdf.Document(stream=pdf_binary)
 	rects = []
 
-	for page_num in range(len(pdf_reader.pages)):
-		page = pdf_reader.pages[page_num]
+	for page_num in range(len(pdf)):
+		page = pdf[page_num]
 
-		annots = page.get('/Annots')
-		if annots:
-			for annot in annots:
-				annot_obj = annot.get_object()
-				rect = annot_obj.get('/Rect')
-				if rect:
-					rects.append(rect)
+		for annot in page.annots():
+			rects.append(annot.rect)
 	
 	return rects
