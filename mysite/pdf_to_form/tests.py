@@ -25,8 +25,8 @@ class ReceivePdfTestCase(TestCase):
 		)
 
 		# uncomment to save new pdf snapshot
-		# with open(path.join(self.snapshots_dir, "checkbox_output2.pdf"), "wb") as file:
-		# 	file.write(response.content)
+		with open(path.join(self.snapshots_dir, "checkbox_output2.pdf"), "wb") as file:
+			file.write(response.content)
 
 		expected_output = pdf_to_binary(path.join(self.snapshots_dir, "checkbox_output.pdf"))
 		expected_checkbox = get_annotation_rects(expected_output)
