@@ -4,28 +4,20 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
 import io
 import json
+from math import floor
+from pdfminer.high_level import extract_pages
+from pdfminer.layout import LTTextBox, LTTextLine, LTChar, Rect
 import PyPDF2
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from reportlab.lib.colors import white
-from .target_chars import CHECK_BOX
-from .make_widgets import make_widget
-
+from reportlab.lib import colors
+from . import widget_names
+from utils.shared_utils import preflight_handler
 
 @ensure_csrf_cookie
 @require_http_methods(["GET", "POST"])
+@preflight_handler()
 def receive_pdf(request: HttpRequest) -> HttpResponse:
-	if request.method == "POST":
-		return convert_pdf(request)
-	elif request.method == "GET":
-		return HttpResponse()
-	else:
-		return HttpResponse(
-			f"Expected GET or POST request but got a {request.method} request.",
-			status=405
-		)
-
-def convert_pdf(request: HttpRequest) -> HttpResponse:
 	if "pdf" not in request.FILES:
 		return HttpResponse(
 			"Either no file uploaded or incorrect form field name",
@@ -46,29 +38,85 @@ def convert_pdf(request: HttpRequest) -> HttpResponse:
 			status=400
 		)
 
-	pdf_data = uploaded_file.read()
-	pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_data))
 	target_chars = json.loads(request.POST["targetChars"])
-	pdf_writer = PyPDF2.PdfWriter()
-
-	for page_num in range(len(pdf_reader.pages)):
-		page = pdf_reader.pages[page_num]
-		packet = io.BytesIO()
-		can = canvas.Canvas(packet, pagesize=letter)
-		can.setFillColor(white)
-
-		for target in target_chars:
-			if target["name"] == CHECK_BOX:
-				make_widget(can, page_num, target["char"], page)
-
-		can.save()
-		packet.seek(0)
-		new_pdf = PyPDF2.PdfReader(packet)
-		page.merge_page(new_pdf.pages[0])
-		pdf_writer.add_page(page)
+	pdf_data = uploaded_file.read()
+	pdf_writer = parse_pdf(pdf_data, target_chars)
 
 	output_pdf_stream = io.BytesIO()
 	pdf_writer.write(output_pdf_stream)
 	output_pdf_stream.seek(0)
 
 	return HttpResponse(output_pdf_stream, content_type="application/pdf")
+
+def parse_pdf(pdf_data: bytes, target_chars: list[dict[str, str]]) -> PyPDF2.PdfWriter:
+	pdf_bytes = io.BytesIO(pdf_data)
+	packet = io.BytesIO()
+	can = canvas.Canvas(packet, pagesize=letter)
+
+	def make_checkbox(bbox: Rect) -> None:
+		x, y, side = square_bbox(bbox)
+		name = widget_names.CHECK_BOX + f"_{page_num}_{element_num}"
+		can.acroForm.checkbox(
+			name=name,
+			x=x,
+			y=y,
+			size=side,
+			borderStyle="solid",
+			fillColor=colors.white,
+			fieldFlags="",
+		)
+
+	# match target_chars to the appropriate widget creation function
+	target_widgets = {}
+
+	for target in target_chars:
+		match target["name"]:
+			case widget_names.CHECK_BOX:
+				target_widgets[target["char"]] = make_checkbox
+
+	# add widgets to the canvas on the expected pages
+	page_num = 0
+
+	for page_layout in extract_pages(pdf_bytes):
+		element_num = 0
+
+		for element in page_layout:
+			if isinstance(element, (LTTextBox, LTTextLine)):
+				for text_line in element:
+					if isinstance(text_line, LTTextLine):
+						for character in text_line:
+							if isinstance(character, LTChar) and character.get_text() in target_widgets:
+								target_widgets[character.get_text()](character.bbox)
+
+			element_num += 1
+
+		page_num += 1
+		can.showPage()
+
+	# merge the widgets in the canvas with the original PDF
+	can.save()
+	packet.seek(0)
+	new_pdf = PyPDF2.PdfReader(packet)
+	original_pdf = PyPDF2.PdfReader(pdf_bytes)
+
+	return merge_pdfs(original_pdf, new_pdf)
+
+def merge_pdfs(pdf1: PyPDF2.PdfReader, pdf2: PyPDF2.PdfReader) -> PyPDF2.PdfWriter:
+	output_pdf = PyPDF2.PdfWriter()
+
+	for page_num in range(len(pdf1.pages)):
+		page1 = pdf1.pages[page_num]
+		page2 = pdf2.pages[page_num]
+
+		page1.merge_page(page2)
+		output_pdf.add_page(page1)
+
+	return output_pdf
+
+# outputs the bottom left corner and the side length of a square in the center of the bounding box
+def square_bbox(bbox: Rect) -> tuple[int, int, int]:
+	x0, y0, x1, y1 = bbox
+	side = floor(x1 - x0) # round down because the bbox is larger than the square
+	padding = (y1 - y0 - side) / 2 # vertical padding to center the square
+
+	return (round(x0), round(y0 + padding), side)

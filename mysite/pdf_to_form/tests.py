@@ -20,13 +20,13 @@ class ReceivePdfTestCase(TestCase):
 		)
 		response = self.client.post(
 			self.url,
-			{"pdf": uploaded_file, "targetChars": '[{"name": "checkbox", "char": "☐"}]'},
+			{"pdf": uploaded_file, "targetChars": '[{"name": "checkbox", "char": "◻"}]'},
 			secure=True
 		)
 
 		# uncomment to save new pdf snapshot
-		with open(path.join(self.snapshots_dir, "checkbox_output2.pdf"), "wb") as file:
-			file.write(response.content)
+		# with open(path.join(self.snapshots_dir, "checkbox_output.pdf"), "wb") as file:
+		# 	file.write(response.content)
 
 		expected_output = pdf_to_binary(path.join(self.snapshots_dir, "checkbox_output.pdf"))
 		expected_checkbox = get_annotation_rects(expected_output)
@@ -42,7 +42,7 @@ class ReceivePdfTestCase(TestCase):
 
 		response = self.client.post(
 			self.url,
-			{"pdf": uploaded_file, "targetChars": '[{"name": "checkbox", "char": "☐"}]'},
+			{"pdf": uploaded_file, "targetChars": '[{"name": "checkbox", "char": "◻"}]'},
 			secure=True
 		)
 
@@ -52,7 +52,7 @@ class ReceivePdfTestCase(TestCase):
 	def test_receive_pdf_with_no_file(self):
 		response = self.client.post(
 			self.url,
-			{"targetChars": '[{"name": "checkbox", "char": "☐"}]'},
+			{"targetChars": '[{"name": "checkbox", "char": "◻"}]'},
 			secure=True
 		)
 
