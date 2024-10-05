@@ -8,9 +8,8 @@ from math import floor
 from pdfminer.high_level import extract_pages
 from pdfminer.layout import LTTextBox, LTTextLine, LTChar, Rect
 import PyPDF2
+from reportlab.lib import colors, pagesizes
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
 from . import widget_names
 from utils.shared_utils import preflight_handler
 
@@ -51,7 +50,7 @@ def receive_pdf(request: HttpRequest) -> HttpResponse:
 def parse_pdf(pdf_data: bytes, target_chars: list[dict[str, str]]) -> PyPDF2.PdfWriter:
 	pdf_bytes = io.BytesIO(pdf_data)
 	packet = io.BytesIO()
-	can = canvas.Canvas(packet, pagesize=letter)
+	can = canvas.Canvas(packet, pagesize=pagesizes.letter)
 
 	def make_checkbox(bbox: Rect) -> None:
 		x, y, side = square_bbox(bbox)
