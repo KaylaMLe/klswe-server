@@ -117,6 +117,5 @@ def merge_pdfs(pdf1: PyPDF2.PdfReader, pdf2: PyPDF2.PdfReader) -> PyPDF2.PdfWrit
 def square_bbox(bbox: Rect) -> tuple[int, int, int]:
 	x0, y0, x1, y1 = bbox
 	side = floor(x1 - x0) # round down because the bbox is larger than the square
-	padding = (y1 - y0 - side) / 2 # vertical padding to center the square
 
-	return (round(x0), round(y0 + padding), side)
+	return (round(x0), round(y1 - side), side)
