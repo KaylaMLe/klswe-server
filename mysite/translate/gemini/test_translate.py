@@ -1,26 +1,30 @@
 from dotenv import load_dotenv
-import google.generativeai as genai
 import matplotlib.pyplot as plt
 import os
 import pandas as pd
 import seaborn as sns
+import vertexai
+from vertexai.generative_models import GenerativeModel
+
+from .system_instruction import system_instruction
 
 
 load_dotenv()
+vertexai.init(project=os.environ["PROJECT_ID"], location=os.environ["REGION"])
 
 
-def evaluate_tuned_model(id: str) -> None:
-	model = genai.get_tuned_model("tunedModels/" + id)
-	snapshots = pd.DataFrame(model.tuning_task.snapshots)
-	sns.lineplot(data=snapshots, x="epoch", y="mean_loss")
-	plt.show()
+# def evaluate_tuned_model(id: str) -> None:
+# 	model = genai.get_tuned_model("tunedModels/" + id)
+# 	snapshots = pd.DataFrame(model.tuning_task.snapshots)
+# 	sns.lineplot(data=snapshots, x="epoch", y="mean_loss")
+# 	plt.show()
 
-def check_model(id: str) -> None:
-	model = genai.get_tuned_model("tunedModels/" + id)
-	print(model)
+# def check_model(id: str) -> None:
+# 	model = genai.get_tuned_model("tunedModels/" + id)
+# 	print(model)
 
-def test_prompt(id: str) -> None:
-	model = genai.GenerativeModel(model_name="tunedModels/" + id)
+def test_prompt() -> None:
+	model = GenerativeModel(model_name=os.environ["MODEL_ID"], system_instruction=system_instruction)
 	javascript_code = """
 	// Define a function to create a person object
 	function createPerson(name, age, isStudent) {
@@ -79,5 +83,4 @@ def test_prompt(id: str) -> None:
 	print(typescript_translation.text)
 
 if __name__ == "__main__":
-    check_model(os.environ["CURRENT_MODEL_ID"])
-#	test_prompt("js-to-ts-model-001")
+	test_prompt()

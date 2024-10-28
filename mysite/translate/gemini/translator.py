@@ -1,6 +1,9 @@
 from dotenv import load_dotenv
-import google.generativeai as genai
 import os
+import vertexai
+from vertexai.generative_models import GenerativeModel
+
+from .system_instruction import system_instruction
 
 
 load_dotenv()
@@ -8,13 +11,9 @@ load_dotenv()
 
 class Translator:
 	def __init__(self):
-		genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+		vertexai.init(project=os.environ["PROJECT_ID"], location=os.environ["REGION"])
 
-		for model_info in genai.list_tuned_models():
-			print("*")
-			print(model_info.name)
-
-		self.model = genai.GenerativeModel("gemini-1.5-flash")
+		self.model = GenerativeModel(model_name=os.environ["MODEL_ID"], system_instruction=system_instruction)
 
 	def translate(self, code: str) -> str:
 		typescript_translation = self.model.generate_content(code)
