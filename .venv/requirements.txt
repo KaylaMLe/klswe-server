@@ -1,5 +1,7 @@
 annotated-types==0.6.0
 asgiref==3.8.1
+awscli==1.35.17
+botocore==1.35.51
 cachetools==5.3.3
 certifi==2024.2.2
 cffi==1.17.1
@@ -14,12 +16,13 @@ django-cors-headers==4.3.1
 django-debug-toolbar==4.3.0
 djangorestframework==3.15.1
 docstring_parser==0.16
+docutils==0.16
 fonttools==4.51.0
 gcloud==0.18.3
 google-ai-generativelanguage==0.6.2
 google-api-core==2.18.0
 google-api-python-client==2.127.0
-google-auth==2.29.0
+google-auth==2.35.0
 google-auth-httplib2==0.2.0
 google-auth-oauthlib==1.2.0
 google-cloud-aiplatform==1.70.0
@@ -37,6 +40,7 @@ grpcio-status==1.62.2
 gunicorn==22.0.0
 httplib2==0.22.0
 idna==3.7
+jmespath==1.0.1
 kiwisolver==1.4.5
 matplotlib==3.8.4
 numpy==1.26.4
@@ -60,10 +64,12 @@ PyPDF2==3.0.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.1
+PyYAML==6.0.2
 reportlab==4.2.2
 requests==2.31.0
 requests-oauthlib==2.0.0
-rsa==4.9
+rsa==4.7.2
+s3transfer==0.10.3
 seaborn==0.13.2
 shapely==2.0.4
 six==1.16.0
