@@ -1,7 +1,5 @@
 annotated-types==0.6.0
 asgiref==3.8.1
-awscli==1.35.17
-botocore==1.35.51
 cachetools==5.3.3
 certifi==2024.2.2
 cffi==1.17.1
@@ -24,7 +22,8 @@ google-api-core==2.18.0
 google-api-python-client==2.127.0
 google-auth==2.35.0
 google-auth-httplib2==0.2.0
-google-auth-oauthlib==1.2.0
+google-auth-oauthlib==1.2.1
+google-auth-stubs==0.3.0
 google-cloud-aiplatform==1.70.0
 google-cloud-bigquery==3.21.0
 google-cloud-core==2.4.1
@@ -35,6 +34,7 @@ google-generativeai==0.5.2
 google-resumable-media==2.7.0
 googleapis-common-protos==1.63.0
 grpc-google-iam-v1==0.13.0
+grpc-stubs==1.53.0.5
 grpcio==1.62.2
 grpcio-status==1.62.2
 gunicorn==22.0.0
@@ -75,6 +75,7 @@ shapely==2.0.4
 six==1.16.0
 sqlparse==0.5.0
 tqdm==4.66.2
+types-requests==2.32.0.20241016
 typing_extensions==4.11.0
 tzdata==2024.1
 uritemplate==4.1.1
