@@ -3,20 +3,21 @@ name: CI/CD Workflow
 on:
   push:
     branches:
-      - main
+      - cicd-triage
 
 jobs:
   deploy:
     runs-on: self-hosted
 
     steps:
-      - name: Fetch and rebase changes
-        run: git fetch origin && git rebase origin/main
+      - name: Activate virtualenv
+        run: |
+          source .venv/bin/activate
+          echo PATH=$PATH >> $GITHUB_ENV
         working-directory: ${{ secrets.ROOT_PATH }}
 
-      - name: Activate virtualenv
-        run: source .venv/bin/activate
-        working-directory: ${{ secrets.ROOT_PATH }}
+      - name: Check pip version
+        run: pip --version
 
       - name: Update dependencies
         run: pip install -r .venv/requirements.txt
