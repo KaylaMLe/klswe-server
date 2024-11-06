@@ -20,9 +20,6 @@ jobs:
           echo PATH=$PATH >> $GITHUB_ENV
         working-directory: ${{ secrets.ROOT_PATH }}
 
-      - name: Check pip version
-        run: pip --version
-
       - name: Update dependencies
         run: pip install -r .venv/requirements.txt
         working-directory: ${{ secrets.ROOT_PATH }}
