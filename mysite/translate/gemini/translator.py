@@ -6,9 +6,11 @@ import vertexai
 from vertexai.generative_models import GenerativeModel
 
 from .system_instruction import system_instruction
+from utils.secrets_manager import SecretsManager
 
 
 load_dotenv()
+
 
 class Translator:
 	def __init__(self):
@@ -16,17 +18,21 @@ class Translator:
 		credentials = None
 		# if dev mode is off (i.e. in production), use the service account credentials
 		if os.environ["DEV_MODE"] != "True":
-			credentials, _ = load_credentials_from_file(os.environ["CREDENTIALS_PATH"])
+			credentials_path = SecretsManager.get_secret("ProdCredentials")["PATH"]
+
+			credentials, _ = load_credentials_from_file(credentials_path)
 			credentials = credentials.with_scopes(["https://www.googleapis.com/auth/cloud-platform"])
 
 			# request an access token for the GCP service account
 			request = google.auth.transport.requests.Request()
 			credentials.refresh(request)
 
+		project_id = SecretsManager.get_secret("BEConfig")["GCP_PROJECT_ID"]
+
 		vertexai.init(
 			credentials=credentials,
-			project=os.environ["PROJECT_ID"],
-			location=os.environ["REGION"]
+			project=project_id,
+			location=os.environ["GCP_REGION"]
 		)
 		self.model = GenerativeModel(
 			model_name=os.environ["MODEL_ID"],

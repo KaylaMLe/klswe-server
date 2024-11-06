@@ -14,7 +14,7 @@ class SecretsManager:
 	_client = None
 
 	@classmethod
-	def get_client(cls):
+	def _get_client(cls):
 		"""Create and return a singleton client for AWS Secrets Manager."""
 
 		if cls._client is None:
@@ -24,9 +24,9 @@ class SecretsManager:
 
 	@classmethod
 	def get_secret(cls, secret_name):
-		"""Retrieve and cache secret value from Secrets Manager by name."""
+		"""Retrieve secret value from Secrets Manager by name."""
 
-		client = cls.get_client()
+		client = cls._get_client()
 
 		try:
 			get_secret_value_response = client.get_secret_value(SecretId=secret_name)

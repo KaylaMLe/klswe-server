@@ -2,8 +2,12 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
+from utils.secrets_manager import SecretsManager
+
 
 load_dotenv()
+
+be_config = SecretsManager.get_secret("BEConfig")
 
 DEBUG = os.environ["DEBUG"] == "True"
 
@@ -11,9 +15,9 @@ ALLOWED_HOSTS = [
 	"localhost",
 	"127.0.0.1",
 	"api.klswe.com",
-	os.environ["BACKEND_IP"],
-	os.environ["BACKEND_IPV4_DNS"],
-	os.environ["MY_IP"]
+	be_config["BACKEND_IP"],
+	be_config["BACKEND_IPV4_DNS"],
+	be_config["MY_IP"]
 ]
 
 # Password validation
@@ -110,7 +114,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "mysite.urls"
 
-SECRET_KEY = os.environ["SECRET_KEY"]
+SECRET_KEY = be_config["SECRET_KEY"]
 
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
