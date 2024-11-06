@@ -7,18 +7,12 @@ from utils.secrets_manager import SecretsManager
 
 load_dotenv()
 
-be_config = SecretsManager.get_secret("BEConfig")
+secret_name = "prod" if os.environ["DEV_MODE"] == "False" else "dev"
+be_config = SecretsManager.get_secret(f"klswe-be/{secret_name}/django_config")
 
 DEBUG = os.environ["DEBUG"] == "True"
 
-ALLOWED_HOSTS = [
-	"localhost",
-	"127.0.0.1",
-	"api.klswe.com",
-	be_config["BACKEND_IP"],
-	be_config["BACKEND_IPV4_DNS"],
-	be_config["MY_IP"]
-]
+ALLOWED_HOSTS = be_config["HOST"].split(",")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

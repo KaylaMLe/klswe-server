@@ -11,8 +11,10 @@ from utils.secrets_manager import SecretsManager
 
 
 load_dotenv()
-be_config = SecretsManager.get_secret("BEConfig")
-vertexai.init(project=be_config["GCP_PROJECT_ID"], location=os.environ["GCP_REGION"])
+vertexai.init(
+	project=SecretsManager.get_secret("klswe-be/shared/gcp_config")["PROJECT_ID"],
+	location=os.environ["GCP_REGION"]
+)
 
 
 # def evaluate_tuned_model(id: str) -> None:

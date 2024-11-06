@@ -18,7 +18,7 @@ class Translator:
 		credentials = None
 		# if dev mode is off (i.e. in production), use the service account credentials
 		if os.environ["DEV_MODE"] != "True":
-			credentials_path = SecretsManager.get_secret("ProdCredentials")["PATH"]
+			credentials_path = SecretsManager.get_secret("klswe-be/prod/gcp_creds")["PATH"]
 
 			credentials, _ = load_credentials_from_file(credentials_path)
 			credentials = credentials.with_scopes(["https://www.googleapis.com/auth/cloud-platform"])
@@ -27,7 +27,7 @@ class Translator:
 			request = google.auth.transport.requests.Request()
 			credentials.refresh(request)
 
-		project_id = SecretsManager.get_secret("BEConfig")["GCP_PROJECT_ID"]
+		project_id = SecretsManager.get_secret("klswe-be/shared/gcp_config")["PROJECT_ID"]
 
 		vertexai.init(
 			credentials=credentials,
