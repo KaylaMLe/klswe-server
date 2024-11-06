@@ -7,12 +7,9 @@ from utils.secrets_manager import SecretsManager
 
 load_dotenv()
 
-secret_name = "prod" if os.environ["DEV_MODE"] == "False" else "dev"
-be_config = SecretsManager.get_secret(f"klswe-be/{secret_name}/django_config")
-
 DEBUG = os.environ["DEBUG"] == "True"
 
-ALLOWED_HOSTS = be_config["HOST"].split(",")
+ALLOWED_HOSTS = os.environ["HOST"].split(",")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -108,7 +105,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "mysite.urls"
 
-SECRET_KEY = be_config["SECRET_KEY"]
+secret_name = "prod" if os.environ["DEV_MODE"] == "False" else "dev"
+
+SECRET_KEY = SecretsManager.get_secret(f"klswe-be/{secret_name}/django_config")["SECRET_KEY"]
 
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
@@ -138,7 +137,7 @@ TEMPLATES = [{
 	},
 }]
 
-TIME_ZONE = "America/Los_Angeles"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
