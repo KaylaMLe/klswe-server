@@ -3,13 +3,17 @@ name: CI/CD Workflow
 on:
   push:
     branches:
-      - cicd-triage
+      - main
 
 jobs:
   deploy:
     runs-on: self-hosted
 
     steps:
+      - name: Fetch and rebase changes
+        run: git fetch origin && git rebase origin/main
+        working-directory: ${{ secrets.ROOT_PATH }}
+
       - name: Activate virtualenv
         run: |
           source .venv/bin/activate
