@@ -7,6 +7,9 @@ from utils.secrets_manager import SecretsManager
 
 load_dotenv()
 
+secret_name = "prod" if os.environ["DEV_MODE"] == "False" else "dev"
+be_config = SecretsManager.get_secret(f"klswe-be/{secret_name}/django_config")
+
 DEBUG = os.environ["DEBUG"] == "True"
 
 ALLOWED_HOSTS = os.environ["HOST"].split(",")
@@ -62,8 +65,12 @@ CSRF_TRUSTED_ORIGINS = [
 
 DATABASES = {
 	"default": {
-		"ENGINE": "django.db.backends.sqlite3",
-		"NAME": BASE_DIR / "db.sqlite3",
+		"ENGINE": "django.db.backends.postgresql",
+		"HOST": "localhost",
+		"NAME": be_config["DB_NAME"],
+		"USER": be_config["DB_USER"],
+		"PASSWORD": be_config["DB_PSWD"],
+		"PORT": be_config["DB_PORT"],
 	}
 }
 
@@ -105,9 +112,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "mysite.urls"
 
-secret_name = "prod" if os.environ["DEV_MODE"] == "False" else "dev"
 
-SECRET_KEY = SecretsManager.get_secret(f"klswe-be/{secret_name}/django_config")["SECRET_KEY"]
+SECRET_KEY = be_config["SECRET_KEY"]
 
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
