@@ -6,8 +6,10 @@ My personal website is a centralized platform to display my professional portfol
 1. [About this repository](#about-this-repository)
 2. [Getting started](#getting-started)
       - [Prerequisites](#prerequisites)
-      - [Installation](#installation)
+      - [Set up](#set-up)
       - [Running the project](#running-the-project)
+        - [Development server](#development-server)
+        - [Gunicorn](#gunicorn)
       - [Testing](#testing)
 3. [Project design](#project-design)
       - [Architecture](#architecture)
@@ -34,13 +36,86 @@ DATABASES = {
     }
 }
 ```
-- [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html): used to securely access secrets. Authentication can be done via an attached IAM role if the application is run on an EC2 instances or an IAM user logged in to the CLI.
 
-### Installation
+### Set up
+1. Clone the repository.
+```
+git clone https://github.com/KaylaMLe/klswe-server.git
+cd klswe-server
+```
+2. Set up a virtual environment.
+```
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows, use .venv\Scripts\activate
+```
+3. Install the required packages listed in the `.venv/requirements.txt` file.
+```
+pip install -r .venv/requirements.txt
+```
+4. Create a `.env` file in the root directory.
+```
+vim .env # Use your preferred text editor to open a new document.
+```
+5. Add the following environment variables to the `.env` file.
+- `AWS_REGION=<AWS region code (e.g., us-east-1, eu-west-2)>`
+    - specifies region where the authenticated AWS Secrets Manager is located
+- `DEBUG=<"True" or "False">`
+    - enables more detailed error messages from Django
+- `DEV_MODE=<"True" or "False">`
+    - toggles between production and development secrets values and GCP authentication methods
+- `GCP_REGION=<GCP region code (e.g., us-central1, europe-west1)>`
+    - determines the GCP region used for Vertex AI
+- `HOST=<comma-separated list of IP addresses and/or domain names>`
+    - restricts servers responses to specific approved hosts
+- `LOG_PATH=<file path>`
+    - defines location of AWS Secrets Manager ClientError logs
+- `MODEL_ID=<Model Garden model resource name>`
+    - specifies the model to use for prompting
+6. Configure secrets management. If you choose to use AWS Secrets Manager, secret names and keys throughout the repository should match the secrets you create.
+7. (Optional) Set up the database if you use PostgreSQL. Add the database name, user, password, and port to your chosen secret management method.
 
 ### Running the project
+1. Activate the virtual environment.
+```
+source .venv/bin/activate  # On Windows, use .venv\Scripts\activate
+```
+2. Change directories to the project folder to simplify later commands.
+```
+cd mysite
+```
+3. Ensure all database migrations are applied before starting the server.
+```
+python manage.py migrate
+```
+The project can now be run with Django's built-in server for testing during development or with Gunicorn for production.
+
+#### Development server
+Start the development server. The terminal output will specify the port at which the server can be accessed.
+```
+python manage.py runserver
+```
+
+#### Gunicorn
+Use Gunicorn with the provided gunicorn_config.py file to start the server.
+```
+gunicorn --config gunicorn_config.py mysite.wsgi
+```
 
 ### Testing
+1. Activate the virtual environment and change directories to the project folder.
+```
+source .venv/bin/activate  # On Windows, use .venv\Scripts\activate
+cd mysite
+```
+2. Run tests.
+- Use the below command to run all tests.
+```
+python manage.py test
+```
+- To test a specific Django app, specify the app's name as defined in its `apps.py`.
+```
+python manage.py test <app name>
+```
 
 ## Project design
 
