@@ -14,6 +14,9 @@ My personal website is a centralized platform to display my professional portfol
 3. [Project design](#project-design)
       - [Architecture](#architecture)
       - [Dependencies](#dependencies)
+        - [Core framework](#core-framework)
+        - [Database and deployment](#database-and-deployment)
+        - [Cloud services](#cloud-services)
       - [File system](#file-system)
 4. [License](#license)
 
@@ -120,16 +123,44 @@ python manage.py test <app name>
 ## Project design
 
 ### Architecture
+This backend application uses RESTful API endpoints to receive inputs from the frontend and return processed data, ensuring that core processing, authentication, and data validation are handled server-side. Each Django app is designed for specific functionality, such as CSRF token management, traffic tracking, or supporting project-specific data, enabling modular and maintainable development. This architecture allows the frontend to delegate complex tasks to the backend, ensuring efficient, scalable data processing and secure interaction handling.
 
 ### Dependencies
+All dependencies and the appropriate version numbers are listed in `.venv\requirements.txt` and are installed during virtual environment setup. Below are key dependencies categorized by functionality, with the official package names in parentheses.
+
+#### Core framework
+- Django (`Django`): the primary framework for building and managing this backend
+- Django Rest Framework (`djangorestframework`): extends Django with additional support for building RESTful APIs
+
+#### Database and deployment
+- PostgreSQL Adapter (`psycopg2-binary`): provides PostgreSQL database connectivity
+- Gunicorn (`gunicorn`): a WSGI server for deploying the Django application in production
+- Django CORS Headers (`django-cors-headers`): manages Cross-Origin Resource Sharing (CORS) policies, allowing secure cross-origin requests only from trusted frontend domains
+
+#### Cloud services
+- AWS SDK for Python (`boto3`): used to interact with AWS Secrets Manager for securely managing sensitive information
+- Google Cloud AI Platform (`google-cloud-aiplatform`): enables interactions with Google Cloud’s Vertex AI for generative AI usage
+- Google Cloud Storage (`google-cloud-storage`): supports Google Cloud Storage interactions, allowing storage and retrieval of large files or model artifacts
+- Google API Client (`google-api-python-client`): a core library for making requests to Google APIs
+- Google Auth (`google-auth`): provides authentication support for accessing Google APIs securely
 
 ### File system
+This file structure section highlights the essential directories and files needed to understand the project’s core functionality, omitting standard Django files and temporary or auto-generated files for simplicity. Directories that contain numerous files serving a single purpose are summarized to maintain clarity. Additionally, specialized apps for specific frontend features are grouped under “various apps” to distinguish them from general utility apps.
 ```
 📁klswe-server/
 ├─📁.github/
 │ └─📁workflows/
 │   └─📜cicd.yml - GitHub Actions script for automated testing and deployment
-└─📁.venv/
+├─📁.venv/ - virtual environment files
+│ └─📜requirements.txt - lists necessary dependencies
+└─📁mysite/ - primary Django project folder
+  ├─📁csrf_setter/ - app for providing CSRF tokens to the frontend
+  ├─📁mysite/ - core configuration folder for the Django project, containing essential settings, routing, and deployment files
+  ├─📁traffic_tracker/ - app for incrementing page visit and form submission counts
+  ├─📁utils/ - shared utility functions across apps
+  ├─📁various apps - provide backend functionality for specific frontend pages
+  ├─📜gunicorn_config.py - configuration file for Gunicorn in production
+  └─📜manage.py - Django command-line utility
 ```
 
 ## License
