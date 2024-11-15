@@ -64,4 +64,3 @@ class VertexModel:
 	def get_response(self, prompt: str) -> str:
 		self._reinit()
 		return self.model.generate_content(prompt).text
-	
