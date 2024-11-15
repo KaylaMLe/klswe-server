@@ -56,7 +56,8 @@ class VertexModel:
 		return credentials
 
 	def _reinit(self) -> None:
-		if self.expiry and self.expiry < datetime.now(timezone.utc) + timedelta(seconds=60):
+		# if the creds will expire within a minute
+		if self.expiry and self.expiry < datetime.now() + timedelta(seconds=60):
 			credentials = self._refresh_creds()
 			self.expiry = credentials.expiry
 			self._initialize_model(credentials)
