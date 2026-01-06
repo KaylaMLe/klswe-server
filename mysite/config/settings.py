@@ -54,7 +54,7 @@ REST_FRAMEWORK = {
 
 
 # Security
-ALLOWED_HOSTS = ['api.klswe.com']
+ALLOWED_HOSTS = ['api.klswe.com', 'localhost', '127.0.0.1']
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -131,4 +131,3 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
