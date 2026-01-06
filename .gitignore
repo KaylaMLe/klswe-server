@@ -32,8 +32,8 @@ nohup.out
 mysite/staticfiles
 
 # Virtual environment
-.venv/*
-!.venv/requirements.txt
+*/.venv/*
+!*/.venv/requirements.txt
 
 # Python
 __pycache__/
@@ -48,4 +48,4 @@ training.json
 
 # Misc
 client*.json
-
+*~
