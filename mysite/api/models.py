@@ -7,6 +7,10 @@ class Entry(models.Model):
         DRAFT = "draft", "Draft"
         PUBLISHED = "published", "Published"
 
+    class Type(models.TextChoices):
+        POST = "post", "Post"
+        CARD = "card", "Card"
+
     slug = models.SlugField(max_length=80, unique=True)
     title = models.CharField(max_length=200)
     summary = models.TextField(blank=True)
