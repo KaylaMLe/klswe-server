@@ -12,9 +12,13 @@ class Entry(models.Model):
         CARD = "card", "Card"
 
     slug = models.SlugField(max_length=80, unique=True)
-    title = models.CharField(max_length=200)
-    summary = models.TextField(blank=True)
+    type = models.CharField(
+        max_length=12,
+        choices=Type.choices,
+        default=Type.POST,
+    )
 
+    title = models.CharField(max_length=200)
     hero_image_url = models.URLField(blank=True)
 
     body = models.TextField()

@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from .models import Entry
+from .serializer import EntrySerializer
 
 
 @api_view(["GET"])
@@ -31,4 +32,6 @@ def entries_posts(request):
 @permission_classes([IsAdminUser])
 def entries_all(request):
     entries = Entry.objects.all()
-    return Response(entries)
+    serialized_entries = EntrySerializer(entries, many=True)
+
+    return Response(serialized_entries.data)
