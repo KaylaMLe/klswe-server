@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from autoslug import AutoSlugField
 
 
 class Entry(models.Model):
@@ -11,7 +12,8 @@ class Entry(models.Model):
         POST = "post", "Post"
         CARD = "card", "Card"
 
-    slug = models.SlugField(max_length=80, unique=True)
+    slug = AutoSlugField(populate_from='title',
+                         unique=True, always_update=False)
     type = models.CharField(
         max_length=12,
         choices=Type.choices,
