@@ -1,1 +1,0 @@
-CHECK_BOX = "checkbox"

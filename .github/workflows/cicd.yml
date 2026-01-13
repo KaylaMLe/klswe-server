@@ -1,33 +1,43 @@
-name: CI/CD Workflow
+name: Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  deploy:
-    runs-on: self-hosted
+  test-and-deploy:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Fetch and rebase changes
-        run: git fetch origin && git rebase origin/main
-        working-directory: ${{ secrets.ROOT_PATH }}
+      - uses: actions/checkout@v4
 
-      - name: Activate virtualenv
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install deps
         run: |
-          source .venv/bin/activate
-          echo PATH=$PATH >> $GITHUB_ENV
-        working-directory: ${{ secrets.ROOT_PATH }}
+          python -m pip install --upgrade pip
+          pip install -r .venv/requirements.txt
 
-      - name: Update dependencies
-        run: pip install -r .venv/requirements.txt
-        working-directory: ${{ secrets.ROOT_PATH }}
+      - name: Run tests
+        run: |
+          cd mysite
+          python manage.py test
 
-      - name: Run Django tests
-        run: python manage.py test
-        working-directory: ${{ secrets.ROOT_PATH }}/mysite
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd klswe-server/
+            git fetch origin
+            git reset --hard origin/main
 
-      - name: Refresh Gunicorn
-        run: source ResetGunicornMaster.sh
-        working-directory: ${{ secrets.RESET_GUNICORN_SCRIPT_PATH }}
+            .venv/bin/pip install -r .venv/requirements.txt
+            .venv/bin/python manage.py migrate --noinput
+            sudo systemctl restart gunicorn-api
