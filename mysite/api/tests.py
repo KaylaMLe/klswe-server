@@ -22,7 +22,7 @@ class EntriesCardsEndpointTests(TestCase):
 
     def test_entries_cards_requires_authentication(self):
         """Test that entries_cards endpoint requires authentication"""
-        response = self.client.get('/entries/cards/')
+        response = self.client.get('/entries/cards/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_entries_cards_returns_only_published_cards(self):
@@ -51,7 +51,7 @@ class EntriesCardsEndpointTests(TestCase):
             published_at=timezone.now()
         )
 
-        response = self.client.get('/entries/cards/')
+        response = self.client.get('/entries/cards/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Should only return published cards
@@ -73,7 +73,7 @@ class EntriesCardsEndpointTests(TestCase):
             status=Entry.Status.DRAFT
         )
 
-        response = self.client.get('/entries/cards/')
+        response = self.client.get('/entries/cards/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
 
@@ -90,7 +90,7 @@ class EntriesPostsEndpointTests(TestCase):
 
     def test_entries_posts_requires_authentication(self):
         """Test that entries_posts endpoint requires authentication"""
-        response = self.client.get('/entries/posts/')
+        response = self.client.get('/entries/posts/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_entries_posts_returns_only_published_posts(self):
@@ -119,7 +119,7 @@ class EntriesPostsEndpointTests(TestCase):
             published_at=timezone.now()
         )
 
-        response = self.client.get('/entries/posts/')
+        response = self.client.get('/entries/posts/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Should only return published posts
@@ -141,7 +141,7 @@ class EntriesPostsEndpointTests(TestCase):
             status=Entry.Status.DRAFT
         )
 
-        response = self.client.get('/entries/posts/')
+        response = self.client.get('/entries/posts/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
 
@@ -164,13 +164,13 @@ class EntriesAllEndpointTests(TestCase):
 
     def test_entries_all_requires_authentication(self):
         """Test that entries_all endpoint requires authentication"""
-        response = self.client.get('/entries/all/')
+        response = self.client.get('/entries/all/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_entries_all_requires_admin_permission(self):
         """Test that entries_all endpoint requires admin permission"""
         self.client.force_authenticate(user=self.regular_user)
-        response = self.client.get('/entries/all/')
+        response = self.client.get('/entries/all/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_entries_all_returns_all_entries_when_admin(self):
@@ -193,7 +193,7 @@ class EntriesAllEndpointTests(TestCase):
             published_at=timezone.now()
         )
 
-        response = self.client.get('/entries/all/')
+        response = self.client.get('/entries/all/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Should return all entries
@@ -214,7 +214,7 @@ class EntriesAllEndpointTests(TestCase):
             hero_image_url='https://example.com/image.jpg'
         )
 
-        response = self.client.get('/entries/all/')
+        response = self.client.get('/entries/all/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
@@ -240,7 +240,7 @@ class EntriesAllEndpointTests(TestCase):
         """Test that entries_all returns empty list when no entries exist"""
         self.client.force_authenticate(user=self.admin_user)
 
-        response = self.client.get('/entries/all/')
+        response = self.client.get('/entries/all/', follow=True)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 0)
 
