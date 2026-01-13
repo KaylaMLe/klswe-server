@@ -17,7 +17,9 @@ def health(request):
 def entries_cards(request):
     entries = Entry.objects.filter(
         status=Entry.Status.PUBLISHED, type=Entry.Type.CARD)
-    return Response(entries)
+    serialized_cards = EntrySerializer(entries, many=True)
+
+    return Response(serialized_cards.data)
 
 
 @api_view(["GET"])
@@ -25,7 +27,9 @@ def entries_cards(request):
 def entries_posts(request):
     entries = Entry.objects.filter(
         status=Entry.Status.PUBLISHED, type=Entry.Type.POST)
-    return Response(entries)
+    serialized_posts = EntrySerializer(entries, many=True)
+
+    return Response(serialized_posts.data)
 
 
 @api_view(["GET"])

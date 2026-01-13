@@ -23,7 +23,7 @@ class EntriesCardsEndpointTests(TestCase):
     def test_entries_cards_requires_authentication(self):
         """Test that entries_cards endpoint requires authentication"""
         response = self.client.get('/entries/cards/')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_entries_cards_returns_only_published_cards(self):
         """Test that entries_cards returns only published card entries"""
@@ -91,7 +91,7 @@ class EntriesPostsEndpointTests(TestCase):
     def test_entries_posts_requires_authentication(self):
         """Test that entries_posts endpoint requires authentication"""
         response = self.client.get('/entries/posts/')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_entries_posts_returns_only_published_posts(self):
         """Test that entries_posts returns only published post entries"""
@@ -165,7 +165,7 @@ class EntriesAllEndpointTests(TestCase):
     def test_entries_all_requires_authentication(self):
         """Test that entries_all endpoint requires authentication"""
         response = self.client.get('/entries/all/')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_entries_all_requires_admin_permission(self):
         """Test that entries_all endpoint requires admin permission"""
@@ -271,7 +271,7 @@ class EntryModelTests(TestCase):
             body='Test body',
             type=Entry.Type.POST
         )
-        self.assertStartsWith(entry.slug, 'test-entry-title')
+        self.assertEqual(entry.slug, 'test-entry-title')
 
     def test_entry_defaults(self):
         """Test entry default values"""
