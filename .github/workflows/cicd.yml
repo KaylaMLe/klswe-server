@@ -24,6 +24,7 @@ jobs:
       - name: Run tests
         run: |
           cd mysite
+          echo "SECRET_KEY=deploy" > .env
           python manage.py test
 
       - name: Deploy via SSH
