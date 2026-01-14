@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -42,7 +43,10 @@ REST_FRAMEWORK = {
 }
 
 # Security
-ALLOWED_HOSTS = ['api.klswe.com']
+if DEBUG:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+else:
+    ALLOWED_HOSTS = ['api.klswe.com']
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -70,7 +74,7 @@ SECURE_HSTS_SECONDS = 3600
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = not DEBUG
 
 SESSION_COOKIE_SECURE = True
 
@@ -97,6 +101,7 @@ ROOT_URLCONF = 'config.urls'
 
 # Static files
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 TEMPLATES = [
     {
