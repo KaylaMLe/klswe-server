@@ -5,5 +5,5 @@ from .models import Entry
 class EntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entry
-        fields = ["id", "slug", "title", "hero_image_url",
+        fields = ["slug", "type", "title", "hero_image_url", "body",
                   "status", "published_at", "created_at", "updated_at"]

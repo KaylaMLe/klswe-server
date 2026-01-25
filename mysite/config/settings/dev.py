@@ -41,7 +41,7 @@ if DEBUG:
             "rest_framework.authentication.BasicAuthentication",
         ),
         "DEFAULT_PERMISSION_CLASSES": (
-            "rest_framework.permissions.IsAuthenticated",
+            "rest_framework.permissions.AllowAny",
         ),
     }
 else:
@@ -50,7 +50,7 @@ else:
             "rest_framework_simplejwt.authentication.JWTAuthentication",
         ),
         "DEFAULT_PERMISSION_CLASSES": (
-            "rest_framework.permissions.IsAuthenticated",
+            "rest_framework.permissions.AllowAny",
         ),
     }
 
@@ -79,6 +79,11 @@ CORS_ALLOWED_ORIGINS = [
     'https://klswe.com',
     'https://www.klswe.com',
 ]
+
+if DEBUG:
+    CORS_ALLOWED_ORIGINS.append('http://localhost:5173')
+    CORS_ALLOWED_ORIGINS.append('http://127.0.0.1:5173')
+
 
 CSRF_COOKIE_SECURE = True
 
