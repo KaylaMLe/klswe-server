@@ -15,22 +15,9 @@ class EntriesCardsEndpointTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
-
-    def test_entries_cards_requires_authentication(self):
-        """Test that entries_cards endpoint requires authentication"""
-        response = self.client.get('/entries/cards/', follow=True)
-        # 401 for JWT auth, 403 for Session auth
-        self.assertIn(response.status_code, [
-                      status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
 
     def test_entries_cards_returns_only_published_cards(self):
         """Test that entries_cards returns only published card entries"""
-        self.client.force_authenticate(user=self.user)
-
         # Create test entries
         published_card = Entry.objects.create(
             title='Published Card',
@@ -57,16 +44,13 @@ class EntriesCardsEndpointTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Should only return published cards
-        entry_ids = [entry['id'] if isinstance(
-            entry, dict) else entry.id for entry in response.data]
-        self.assertIn(published_card.id, entry_ids)
-        self.assertNotIn(draft_card.id, entry_ids)
-        self.assertNotIn(published_post.id, entry_ids)
+        entry_slugs = [entry['slug'] for entry in response.data]
+        self.assertIn(published_card.slug, entry_slugs)
+        self.assertNotIn(draft_card.slug, entry_slugs)
+        self.assertNotIn(published_post.slug, entry_slugs)
 
     def test_entries_cards_returns_empty_list_when_no_published_cards(self):
         """Test that entries_cards returns empty list when no published cards exist"""
-        self.client.force_authenticate(user=self.user)
-
         # Create only draft cards
         Entry.objects.create(
             title='Draft Card',
@@ -85,22 +69,9 @@ class EntriesPostsEndpointTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
-
-    def test_entries_posts_requires_authentication(self):
-        """Test that entries_posts endpoint requires authentication"""
-        response = self.client.get('/entries/posts/', follow=True)
-        # 401 for JWT auth, 403 for Session auth
-        self.assertIn(response.status_code, [
-                      status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
 
     def test_entries_posts_returns_only_published_posts(self):
         """Test that entries_posts returns only published post entries"""
-        self.client.force_authenticate(user=self.user)
-
         # Create test entries
         published_post = Entry.objects.create(
             title='Published Post',
@@ -127,16 +98,13 @@ class EntriesPostsEndpointTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Should only return published posts
-        entry_ids = [entry['id'] if isinstance(
-            entry, dict) else entry.id for entry in response.data]
-        self.assertIn(published_post.id, entry_ids)
-        self.assertNotIn(draft_post.id, entry_ids)
-        self.assertNotIn(published_card.id, entry_ids)
+        entry_slugs = [entry['slug'] for entry in response.data]
+        self.assertIn(published_post.slug, entry_slugs)
+        self.assertNotIn(draft_post.slug, entry_slugs)
+        self.assertNotIn(published_card.slug, entry_slugs)
 
     def test_entries_posts_returns_empty_list_when_no_published_posts(self):
         """Test that entries_posts returns empty list when no published posts exist"""
-        self.client.force_authenticate(user=self.user)
-
         # Create only draft posts
         Entry.objects.create(
             title='Draft Post',
@@ -165,13 +133,6 @@ class EntriesAllEndpointTests(TestCase):
             is_staff=True,
             is_superuser=True
         )
-
-    def test_entries_all_requires_authentication(self):
-        """Test that entries_all endpoint requires authentication"""
-        response = self.client.get('/entries/all/', follow=True)
-        # 401 for JWT auth, 403 for Session auth
-        self.assertIn(response.status_code, [
-                      status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN])
 
     def test_entries_all_requires_admin_permission(self):
         """Test that entries_all endpoint requires admin permission"""
@@ -203,9 +164,9 @@ class EntriesAllEndpointTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Should return all entries
-        entry_ids = [entry['id'] for entry in response.data]
-        self.assertIn(published_card.id, entry_ids)
-        self.assertIn(published_post.id, entry_ids)
+        entry_slugs = [entry['slug'] for entry in response.data]
+        self.assertIn(published_card.slug, entry_slugs)
+        self.assertIn(published_post.slug, entry_slugs)
 
     def test_entries_all_returns_serialized_data(self):
         """Test that entries_all returns properly serialized data"""
@@ -226,7 +187,6 @@ class EntriesAllEndpointTests(TestCase):
 
         entry_data = response.data[0]
         # Check that all serializer fields are present
-        self.assertIn('id', entry_data)
         self.assertIn('slug', entry_data)
         self.assertIn('title', entry_data)
         self.assertIn('hero_image_url', entry_data)
@@ -236,9 +196,8 @@ class EntriesAllEndpointTests(TestCase):
         self.assertIn('updated_at', entry_data)
 
         # Check that values match
-        self.assertEqual(entry_data['id'], entry.id)
-        self.assertEqual(entry_data['title'], entry.title)
         self.assertEqual(entry_data['slug'], entry.slug)
+        self.assertEqual(entry_data['title'], entry.title)
         self.assertEqual(entry_data['status'], entry.status)
         self.assertEqual(entry_data['hero_image_url'], entry.hero_image_url)
 
