@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from api.views import health, entries_cards, entries_posts, entries_all
+from api.views import health, entries_cards, entries_posts, entries_post_slug, entries_all
 
 
 urlpatterns = [
@@ -16,5 +16,6 @@ urlpatterns = [
 
     path("entries/cards/", entries_cards),
     path("entries/posts/", entries_posts),
+    path("entries/post/<slug:slug>/", entries_post_slug),
     path("entries/all/", entries_all),
 ]

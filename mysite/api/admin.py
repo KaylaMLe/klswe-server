@@ -4,7 +4,8 @@ from .models import Entry
 
 @admin.register(Entry)
 class EntryAdmin(admin.ModelAdmin):
-    list_display = ("title", "type", "status", "published_at", "updated_at")
+    list_display = ("title", "slug", "type", "status",
+                    "published_at", "updated_at")
     list_filter = ("status",)
     search_fields = ("title", "slug", "body", "type")
     ordering = ("-published_at", "-updated_at")

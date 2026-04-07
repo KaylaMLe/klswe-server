@@ -30,6 +30,18 @@ def entries_posts(request):
 
 
 @api_view(["GET"])
+def entries_post_slug(request, slug):
+    try:
+        entry = Entry.objects.get(
+            type=Entry.Type.POST, status=Entry.Status.PUBLISHED, slug=slug)
+    except Entry.DoesNotExist:
+        return Response({"error": "Post not found"}, status=404)
+
+    serialized_entry = EntrySerializer(entry)
+    return Response(serialized_entry.data)
+
+
+@api_view(["GET"])
 @permission_classes([IsAdminUser])
 def entries_all(request):
     entries = Entry.objects.all()
