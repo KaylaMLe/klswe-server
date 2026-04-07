@@ -32,7 +32,7 @@ nohup.out
 mysite/staticfiles
 
 # Virtual environment
-*/.venv/*
+.venv/*
 !*/.venv/requirements.txt
 
 # Python
@@ -49,3 +49,4 @@ training.json
 # Misc
 client*.json
 *~
+.hidden
